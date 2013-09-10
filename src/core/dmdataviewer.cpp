@@ -30,11 +30,9 @@
 
 using namespace DM;
 
-DataViewer::DataViewer(const View& view, const System* system):
-	name(view.getName()), type(view.getType()), system(system)
+DataViewer::DataViewer(const View& view):
+	currentViewDefinition(view)
 {
-	foreach(const std::string& attributeName, view.getAllAttributes())
-		attributes.insert(attributeName);
 }
 
 std::vector<Component*>	DataViewer::getComponents(const DataFilter& filter) const
@@ -64,19 +62,12 @@ bool DataViewer::removeComponent(Component* component)
 
 void DataViewer::update(const View& view)
 {
-	if(view.getName() != name)
+	if(view.getName() != currentViewDefinition.getName())
 	{
 		Logger(Warning) << "DataViewer update failed";
 		return;
 	}
-
-	attributeAccessMap.clear();
-	componentAccess = (ACCESS)view.getAccessType();
-	foreach(const std::string attributeName, view.getAllAttributes())
-	{
-		attributes.insert(attributeName);
-		attributeAccessMap[name] = view.getAttributeAccessType(attributeName);
-	}
+	currentViewDefinition = view;
 }
 
 void DataViewer::migrateComponent(const Component* src, Component* dest)
@@ -89,4 +80,13 @@ void DataViewer::migrateComponent(const Component* src, Component* dest)
 			*it = dest;
 		}
 	}
+}
+
+void DataViewer::migrateAllComponents()
+{
+}
+
+const View* DataViewer::getCurrentViewDefinition()
+{
+	return &currentViewDefinition;
 }

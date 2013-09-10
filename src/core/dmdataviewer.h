@@ -42,27 +42,31 @@ class DataFilter
 class DataViewer
 {
 public:
-	DataViewer(const View& view, const System* system);
+	DataViewer(const View& view);
 
 	std::vector<Component*>	getComponents(const DataFilter& filter = DataFilter()) const;
 	//std::vector<Attribute*>	getAttributes(	const std::string name, 
 	//										const DataFilter& filter = DataFilter());
-	void	addComponent(Component* component);
-	bool	removeComponent(Component* component);
+	void		addComponent(Component* component);
+	bool		removeComponent(Component* component);
 
-	void	update(const View& view);
-	void	migrateComponent(const Component* src, Component* dest);
+	void		update(const View& view);
+	void		migrateComponent(const Component* src, Component* dest);
+	void		migrateAllComponents();
+	const View*	getCurrentViewDefinition();
 private:
-	const std::string name;
-	const int type;
-	const System* system;
+	View	currentViewDefinition;
+
+	//const std::string name;
+	//const int type;
+	//const System* system;
 	
 	// elements
 	std::vector<Component*>	components;
-	std::set<std::string>	attributes;
+	//std::set<std::string>	attributes;
 	// temporary access setup
-	ACCESS componentAccess;
-	std::map<std::string, ACCESS> attributeAccessMap;
+	//ACCESS componentAccess;
+	//std::map<std::string, ACCESS> attributeAccessMap;
 };
 
 }

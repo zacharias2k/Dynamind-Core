@@ -28,6 +28,7 @@
 #include "dmedge.h"
 #include "dmface.h"
 #include "dmrasterdata.h"
+#include "dmdataviewer.h"
 
 using namespace DM;
 
@@ -41,9 +42,11 @@ DerivedSystem::DerivedSystem(System* sys): System()
 	allSubSystemsLoaded = false;
 	//allRasterDataLoaded = false;
 
-	viewdefinitions = sys->viewdefinitions;
+	dataViewers = sys->dataViewers;
+
+	//viewdefinitions = sys->viewdefinitions;
 	//predecessors = sys->predecessors;
-	views = sys->views;
+	//views = sys->views;
 
 	lastModule = sys->lastModule;
 
@@ -188,11 +191,23 @@ std::map<std::string, Component*> DerivedSystem::getAllComponentsInView(const DM
 		return predec_comps;
 	else
 	{
+		std::map<std::string, Component*> comps;
+		DataViewer* dataViewer;
+		if(map_contains(&dataViewers, view.getName(), dataViewer))
+		{
+			// reload all components
+			dataViewer->migrateAllComponents();
+
+			foreach(Component* c, dataViewer->getComponents())
+				comps[c->getUUID()] = c;
+		}
+		return comps;
+		/*
 		std::map<std::string, Component*> comps = views[view.getName()];
 		for(std::map<std::string, Component*>::iterator it = comps.begin(); it != comps.end(); ++it)
 			it->second = getComponent(it->first);
 
-		return comps;
+		return comps;*/
 	}
 }
 std::map<std::string, Node*> DerivedSystem::getAllNodes()

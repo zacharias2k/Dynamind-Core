@@ -157,7 +157,9 @@ System::~System()
 	//    delete v;
 	// memory leak
 
-	viewdefinitions.clear();
+	//viewdefinitions.clear();
+	mforeach(DataViewer* viewer, dataViewers)
+		delete viewer;
 
 	Component::SQLDelete();
 }
@@ -171,17 +173,19 @@ void System::updateViews(Component * c)
 		DM::Logger(DM::Error)  << "Component NULL in updateView";
 		return;
 	}
-	foreach (std::string view, c->getInViews())
-		this->views[view][c->getUUID()] = c;
+	foreach(std::string viewName, c->getInViews())
+		this->dataViewers[viewName]->addComponent(c);
 }
 
-DM::View * System::getViewDefinition(string name) 
+const View * System::getViewDefinition(string name) 
 {
-	if (viewdefinitions.find(name) == viewdefinitions.end()) {
+	DataViewer* dataViewer;
+	if(map_contains(&dataViewers, name, dataViewer))
+	{
 		Logger(Debug) << "Couldn't find view definition for " << name;
-		return 0;
+		return NULL;
 	}
-	return viewdefinitions[name];
+	return dataViewer->getCurrentViewDefinition();
 }
 
 Components System::getType() const
@@ -196,16 +200,14 @@ Component * System::addComponent(Component* c, const DM::View & view)
 {
 	QMutexLocker ml(mutex);
 
-	if(!addChild(c)) {
+	if(!addChild(c)) 
+	{
 		delete c;
 		return 0;
 	}
-	components[c->getQUUID()] = c;
 
-	if (!view.getName().empty()) {
-		this->views[view.getName()][c->getUUID()] = c;
-		c->setView(view.getName());
-	}
+	components[c->getQUUID()] = c;
+	addComponentToView(c, view);
 	this->updateViews(c);
 
 	return c;
@@ -248,10 +250,9 @@ Node* System::addNode(const Node &ref,  const DM::View & view)
 
 	if (n == NULL)
 		return NULL;
-	if (!view.getName().empty()) {
-		this->views[view.getName()][n->getUUID()] = n;
-		n->setView(view.getName());
-	}
+	
+	addComponentToView(n, view);
+
 	return n;
 }
 
@@ -263,10 +264,9 @@ Node * System::addNode(double x, double y, double z,  const DM::View & view)
 
 	if (n == NULL)
 		return NULL;
-	if (!view.getName().empty()) {
-		this->views[view.getName()][n->getUUID()] = n;
-		n->setView(view.getName());
-	}
+	
+	addComponentToView(n, view);
+
 	return n;
 }
 
@@ -322,7 +322,7 @@ bool System::removeNode(std::string name)
 	return true;
 }
 
-Edge* System::addEdge(Edge* edge)
+Edge* System::addEdge(Edge* edge, const DM::View & view)
 {
 	QMutexLocker ml(mutex);
 
@@ -336,28 +336,16 @@ Edge* System::addEdge(Edge* edge)
 		return 0;
 	}
 
-	edges[edge->getQUUID()]=edge;
-	foreach (std::string v, edge->getInViews()) {
-		views[v][edge->getUUID()]=edge;
-	}
+	edges[edge->getQUUID()] = edge;
+	addComponentToView(edge, view);
 	this->updateViews(edge);
+
 	return edge;
 }
 Edge* System::addEdge(Node * start, Node * end, const View &view)
 {
 	QMutexLocker ml(mutex);
-
-	Edge * e = this->addEdge(new Edge(start, end));
-
-	if (e == 0)
-		return 0;
-	if (!view.getName().empty()) 
-	{
-		this->views[view.getName()][e->getUUID()] = e;
-		e->setView(view.getName());
-	}
-
-	return e;
+	return this->addEdge(new Edge(start, end));
 }
 Edge* System::getEdge(std::string uuid)
 {
@@ -397,7 +385,7 @@ bool System::removeEdge(std::string name)
 	return true;
 }
 
-Face* System::addFace(Face *f) 
+Face* System::addFace(Face *f, const DM::View & view) 
 {
 	QMutexLocker ml(mutex);
 
@@ -406,23 +394,16 @@ Face* System::addFace(Face *f)
 		return 0;
 	}
 
-	faces[f->getQUUID()]=f;
+	faces[f->getQUUID()] = f;
+	addComponentToView(f, view);
 	this->updateViews(f);
+
 	return f;
 }
-Face* System::addFace(std::vector<DM::Node*> nodes,  const DM::View & view)
+Face* System::addFace(std::vector<DM::Node*> nodes, const DM::View & view)
 {
 	QMutexLocker ml(mutex);
-
-	Face *f = this->addFace(new Face(nodes));
-
-	if (f == 0)
-		return 0;
-	if (!view.getName().empty()) {
-		this->views[view.getName()][f->getUUID()] = f;
-		f->setView(view.getName());
-	}
-	return f;
+	return this->addFace(new Face(nodes));
 }
 Face* System::getFace(std::string uuid)
 {
@@ -458,11 +439,14 @@ RasterData * System::addRasterData(RasterData *r, const DM::View & view)
 	}
 
 	rasterdata[r->getQUUID()] = r;
-
-	if (!view.getName().empty()) {
-		this->views[view.getName()][r->getUUID()] = r;
+	
+	DataViewer* dataViewer;
+	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
+	{
+		dataViewer->addComponent(r);
 		r->setView(view.getName());
 	}
+
 	this->updateViews(r);
 	return r;
 }
@@ -504,8 +488,14 @@ bool System::addComponentToView(Component *comp, const View &view)
 {
 	QMutexLocker ml(mutex);
 
-	this->views[view.getName()][comp->getUUID()] = comp;
-	comp->setView(view.getName());
+	DataViewer* dataViewer;
+	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
+	{
+		dataViewer->addComponent(comp);
+		comp->setView(view.getName());
+		return false;
+	}
+
 	return true;
 }
 
@@ -513,8 +503,13 @@ bool System::removeComponentFromView(Component *comp, const View &view)
 {
 	QMutexLocker ml(mutex);
 
-	comp->removeView(view);
-	this->views[view.getName()].erase(comp->getUUID());
+	DataViewer* dataViewer;
+	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
+	{
+		dataViewer->removeComponent(comp);
+		comp->removeView(view);
+	}
+
 	return true;
 }
 
@@ -528,12 +523,8 @@ System * System::addSubSystem(System *newsystem,  const DM::View & view)
 		return 0;
 	}
 
-	subsystems[newsystem->getQUUID()]=newsystem;
-
-	if (!view.getName().empty()) {
-		this->views[view.getName()][newsystem->getUUID()] = newsystem;
-		newsystem->setView(view.getName());
-	}
+	subsystems[newsystem->getQUUID()] = newsystem;
+	addComponentToView(newsystem, view);
 
 	return newsystem;
 }
@@ -559,7 +550,13 @@ bool System::removeSubSystem(std::string name)
 
 std::map<std::string, Component*> System::getAllComponentsInView(const DM::View & view)
 {
-	const std::map<std::string, Component*> &cmps = views[view.getName()];
+	std::map<std::string, Component*> cmps;
+	DataViewer* dataViewer;
+	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
+		foreach(Component* c, dataViewer->getComponents())
+			cmps[c->getUUID()] = c;
+
+	//const std::map<std::string, Component*> &cmps = views[view.getName()];
 	// precaching
 	/*if(view.getType() == DM::NODE)
 	{
@@ -610,10 +607,13 @@ Component* System::clone()
 	return new System(*this);
 }
 
-bool System::addView(View view)
+bool System::addView(const View& view)
 {
 	QMutexLocker ml(mutex);
 
+	this->dataViewers[view.getName()] = new DataViewer(view);
+
+	/*
 	//For each view create one dummy element
 	DM::View  * existingView = this->viewdefinitions[view.getName()];
 	if (!existingView) 
@@ -632,7 +632,7 @@ bool System::addView(View view)
 		attr.setType(view.getAttributeType(a));
 		if (view.getAttributeType(a) == Attribute::LINK)
 			attr.setLink(view.getNameOfLinkedView(a), "");
-	}
+	}*/
 
 	return true;
 }
@@ -640,8 +640,8 @@ const std::vector<DM::View> System::getViews()
 {
 	std::vector<DM::View> viewlist;
 
-	mforeach(View* v, viewdefinitions)
-		viewlist.push_back(View(*v));
+	mforeach(DataViewer* dataViewer, dataViewers)
+		viewlist.push_back(View(*dataViewer->getCurrentViewDefinition()));
 
 	return viewlist;
 }
@@ -718,15 +718,13 @@ bool System::removeChild(Component* c)
 	case SUBSYSTEM:    subsystems.erase(id);   break;
 	}
 
-	if(c->HasAttribute(UUID_ATTRIBUTE_NAME))
-	{
-		typedef std::map<std::string, std::map<std::string, Component*> > viewmap;
-		std::string uuid = c->getUUID();
-		for(viewmap::iterator it = views.begin(); it != views.end(); ++it)
-			it->second.erase(uuid);
+	DataViewer* dataViewer;
+	foreach(std::string viewName, c->getInViews())
+		if(map_contains(&dataViewers, viewName, dataViewer))
+			dataViewer->removeComponent(c);
 
-		componentNameMap.erase(uuid);
-	}
+	if(c->HasAttribute(UUID_ATTRIBUTE_NAME))
+		componentNameMap.erase(c->getUUID());
 
 	delete c;
 	return true;

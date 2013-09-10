@@ -31,6 +31,7 @@
 #include <vector>
 #include <dmview.h>
 #include <dmcomponent.h>
+#include <dmdataviewer.h>
 
 #ifdef SWIG
 #define DM_HELPER_DLL_EXPORT
@@ -113,13 +114,13 @@ public:
 	Node * addNode(const Node &n,  const DM::View & view = DM::View());
 
 	/** @brief Adds a new Edge to the system, the system class takes ownership of the edge */
-	Edge* addEdge(Edge* edge);
+	Edge* addEdge(Edge* edge, const DM::View & view = DM::View());
 
 	/** @brief Creates a new Edge, based on the UUID of the start and end node */
 	Edge* addEdge(Node * start, Node * end, const DM::View & view = DM::View());
 
 	/** @brief Adds a new Face to the system, the system class takes ownership of the face  */
-	Face * addFace(Face * f);
+	Face * addFace(Face * f,  const DM::View & view = DM::View());
 
 	/** @brief Creates a new Face, based on the UUID of the nodes stored in the vector */
 	Face * addFace(std::vector<Node*> nodes,  const DM::View & view = DM::View());
@@ -209,13 +210,13 @@ public:
 	System* createSuccessor();
 
 	/** @brief Adds a new view to the system. At the moment always returns true */
-	bool addView(DM::View view);
+	bool addView(const DM::View& view);
 
 	/** @brief return a vector of views avalible in the system */
 	const std::vector<DM::View> getViews();
 
 	/** @brief Retruns View */
-	View * getViewDefinition(std::string name);
+	const View* getViewDefinition(std::string name);
 
 	/** @brief Creates a clone of the System. UUID and Attributes stay the same as its origin */
 	Component* clone();
@@ -280,8 +281,10 @@ private:
 	std::vector<DM::System*> sucessors;
 
 	std::map<QUuid, Component*>		ownedchilds;
-	std::map<std::string, View*>	viewdefinitions;
-	std::map<std::string, std::map<std::string, Component*> > views;   
+
+	std::map<std::string, DataViewer*>	dataViewers;
+	//std::map<std::string, View*>	viewdefinitions;
+	//std::map<std::string, std::map<std::string, Component*> > views;   
 };
 
 typedef std::map<std::string, DM::System*> SystemMap;
