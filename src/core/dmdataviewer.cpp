@@ -55,8 +55,8 @@ bool DataViewer::removeComponent(Component* component)
 	std::vector<Component*>::iterator it = find(components.begin(), components.end(), component);
 	if(it != components.end())
 	{
-		return true;
 		components.erase(it);
+		return true;
 	}
 	return false;
 }
