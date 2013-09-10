@@ -158,8 +158,9 @@ System::~System()
 	// memory leak
 
 	//viewdefinitions.clear();
-	mforeach(DataViewer* viewer, dataViewers)
-		delete viewer;
+	if(this->sucessors.size()==0)
+		mforeach(DataViewer* viewer, dataViewers)
+			delete viewer;
 
 	Component::SQLDelete();
 }

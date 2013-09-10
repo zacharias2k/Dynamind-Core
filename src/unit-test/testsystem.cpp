@@ -323,15 +323,16 @@ TEST_F(TestSystem,successorViewTest)
 	DM::Log::init(new DM::OStreamLogSink(*out), DM::Error);
 	DM::Logger(DM::Standard) << "Test Successor states (Views)";
 
-	System sys;
+	System* sys = new System;
 	View view("viewName", NODE, MODIFY);
-	sys.addView(view);
-	Node* node = sys.addNode(1,2,3, view);
-	System* suc_sys = sys.createSuccessor();
+	sys->addView(view);
+	Node* node = sys->addNode(1,2,3, view);
+	System* suc_sys = sys->createSuccessor();
 	std::map<std::string, Component*> comps = suc_sys->getAllComponentsInView(view);
 	ASSERT_TRUE(comps.size() == 1);
 	Component* successor_node = comps.begin()->second;
 	ASSERT_TRUE(successor_node != node);
+	delete sys;
 }
 
 TEST_F(TestSystem, SqlNodeTest)

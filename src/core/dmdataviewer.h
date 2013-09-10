@@ -34,6 +34,7 @@ namespace DM {
 	
 class Component;
 class System;
+class DerivedSystem;
 
 class DataFilter
 {
@@ -52,14 +53,14 @@ public:
 
 	void		update(const View& view);
 	void		migrateComponent(const Component* src, Component* dest);
-	void		migrateAllComponents();
+	void		migrateAllComponents(DerivedSystem* system);
 	const View*	getCurrentViewDefinition();
 private:
 	View	currentViewDefinition;
 
 	//const std::string name;
 	//const int type;
-	//const System* system;
+	System* system;
 	
 	// elements
 	std::vector<Component*>	components;

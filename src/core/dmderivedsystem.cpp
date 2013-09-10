@@ -196,7 +196,7 @@ std::map<std::string, Component*> DerivedSystem::getAllComponentsInView(const DM
 		if(map_contains(&dataViewers, view.getName(), dataViewer))
 		{
 			// reload all components
-			dataViewer->migrateAllComponents();
+			dataViewer->migrateAllComponents(this);
 
 			foreach(Component* c, dataViewer->getComponents())
 				comps[c->getUUID()] = c;

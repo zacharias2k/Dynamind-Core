@@ -27,6 +27,7 @@
 #include "dmcomponent.h"
 #include "dmsystem.h"
 #include "dmlogger.h"
+#include "dmderivedsystem.h"
 
 using namespace DM;
 
@@ -82,8 +83,11 @@ void DataViewer::migrateComponent(const Component* src, Component* dest)
 	}
 }
 
-void DataViewer::migrateAllComponents()
+void DataViewer::migrateAllComponents(DerivedSystem* system)
 {
+	std::vector<Component*> predecComponents = components;
+	foreach(Component* c, predecComponents)
+		migrateComponent(c, system->getComponent(c->getUUID()));
 }
 
 const View* DataViewer::getCurrentViewDefinition()
