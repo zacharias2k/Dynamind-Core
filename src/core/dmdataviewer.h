@@ -51,6 +51,7 @@ public:
 	bool	removeComponent(Component* component);
 
 	void	update(const View& view);
+	void	migrateComponent(const Component* src, Component* dest);
 private:
 	const std::string name;
 	const int type;

@@ -75,3 +75,15 @@ void DataViewer::update(const View& view)
 	foreach(const std::string attributeName, view.getAllAttributes())
 		attributeAccessMap[name] = view.getAttributeAccessType(attributeName);
 }
+
+void DataViewer::migrateComponent(const Component* src, Component* dest)
+{
+	if(src != dest && dest != NULL)
+	{
+		std::vector<Component*>::iterator it = find(components.begin(), components.end(), src);
+		if(it != components.end())
+		{
+			*it = dest;
+		}
+	}
+}
