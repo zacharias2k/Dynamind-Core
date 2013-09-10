@@ -52,6 +52,7 @@ System::System() : Component(true)
 }
 System::System(const System& s) : Component(s, true)
 {
+	/*
 	//predecessors = s.predecessors;
 	lastModule = s.lastModule;
 	//mutex = new QMutex(QMutex::Recursive);
@@ -140,6 +141,7 @@ System::System(const System& s) : Component(s, true)
 		else
 			Logger(Error) << "Not found in child replace map: " << c->getUUID();
 	}
+	*/
 }
 System::~System()
 {

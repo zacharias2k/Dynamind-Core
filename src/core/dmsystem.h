@@ -77,8 +77,10 @@ public:
 	std::map<std::string, Component*> getAllChilds();
 	std::vector<Component*> getChilds();
 
+private:
 	/** @brief Copies a System  */
 	System(const System& s);
+public:
 
 	/** @brief creates a new System */
 	System();
