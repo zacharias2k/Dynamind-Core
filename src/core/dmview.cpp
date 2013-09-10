@@ -110,6 +110,14 @@ Attribute::AttributeType View::getAttributeType(std::string name) const
 	return Attribute::NOTYPE;
 }
 
+ACCESS View::getAttributeAccessType(std::string name) const
+{
+	int a = 0;
+	map_contains(&ownedAttributes, name, a);
+	return (ACCESS)a;
+}
+
+
 std::vector<std::string> View::getAllAttributes() const
 {
 	std::vector<std::string> names;

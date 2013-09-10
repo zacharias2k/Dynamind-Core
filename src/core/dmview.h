@@ -131,6 +131,9 @@ public:
 	/** @brief Returns Attribute Type */
 	Attribute::AttributeType getAttributeType(std::string name) const;
 
+	/** @brief Returns Attribute Type */
+	ACCESS getAttributeAccessType(std::string name) const;
+
 	/** @brief Sets Attribute Type */
 	void setAttributeType(std::string name, Attribute::AttributeType type);
 
@@ -145,7 +148,6 @@ public:
 	std::string getNameOfLinkedView(std::string name);
 
 	std::vector<std::string> getAllAttributes() const;
-
 private:
 	int type;
 	std::string name;
