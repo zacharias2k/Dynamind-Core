@@ -47,6 +47,15 @@ View::View()
 	this->type = -1;
 }
 
+View::View(const View& ref):
+	name(ref.name), type(ref.type), 
+	accesstypeGeometry(ref.accesstypeGeometry),
+	ownedAttributes(ref.ownedAttributes), 
+	attributeTypes(ref.attributeTypes),
+	attributeLinks(ref.attributeLinks)
+{
+}
+
 void View::addAttribute(std::string name) {
 	this->ownedAttributes[name] = WRITE;
 	this->attributeTypes[name] = Attribute::NOTYPE;
@@ -112,7 +121,7 @@ Attribute::AttributeType View::getAttributeType(std::string name) const
 
 ACCESS View::getAttributeAccessType(std::string name) const
 {
-	int a = 0;
+	int a = ACCESS();
 	map_contains(&ownedAttributes, name, a);
 	return (ACCESS)a;
 }
