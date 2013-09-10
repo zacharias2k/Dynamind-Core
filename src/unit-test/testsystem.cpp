@@ -317,6 +317,23 @@ TEST_F(TestSystem,sqlsuccessortest)
 	//delete sys2;	successor states are deleted by sys
 }
 
+TEST_F(TestSystem,successorViewTest)
+{
+	ostream *out = &cout;
+	DM::Log::init(new DM::OStreamLogSink(*out), DM::Error);
+	DM::Logger(DM::Standard) << "Test Successor states (Views)";
+
+	System sys;
+	View view("viewName", NODE, MODIFY);
+	sys.addView(view);
+	Node* node = sys.addNode(1,2,3, view);
+	System* suc_sys = sys.createSuccessor();
+	std::map<std::string, Component*> comps = suc_sys->getAllComponentsInView(view);
+	ASSERT_TRUE(comps.size() == 1);
+	Component* successor_node = comps.begin()->second;
+	ASSERT_TRUE(successor_node != node);
+}
+
 TEST_F(TestSystem, SqlNodeTest)
 {
 	ostream *out = &cout;
