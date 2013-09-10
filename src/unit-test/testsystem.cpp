@@ -408,6 +408,7 @@ TEST_F(TestSystem, EdgeTestTreeSearch)
 
 	DM::Node * startNode = sys->getNode(n1->getUUID());
 	DM::Edge * se1 = startNodeMap[startNode];
+	ASSERT_TRUE(se1 != NULL);
 	DM::Node * nextNode = sys->getNode(se1->getEndpointName());
 	DM::Edge * se2 = startNodeMap[nextNode];
 

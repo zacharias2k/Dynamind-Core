@@ -490,8 +490,14 @@ bool System::addComponentToView(Component *comp, const View &view)
 	QMutexLocker ml(mutex);
 
 	DataViewer* dataViewer;
-	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
+	if (!view.getName().empty())
 	{
+		if(!map_contains(&dataViewers, view.getName(), dataViewer))
+		{
+			this->addView(view);
+			dataViewer = dataViewers[view.getName()];
+		}
+
 		dataViewer->addComponent(comp);
 		comp->setView(view.getName());
 		return false;
@@ -611,8 +617,8 @@ Component* System::clone()
 bool System::addView(const View& view)
 {
 	QMutexLocker ml(mutex);
-
-	this->dataViewers[view.getName()] = new DataViewer(view);
+	if(!map_contains(&dataViewers, view.getName()))
+		this->dataViewers[view.getName()] = new DataViewer(view);
 
 	/*
 	//For each view create one dummy element
