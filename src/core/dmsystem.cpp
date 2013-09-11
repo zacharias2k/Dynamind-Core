@@ -181,7 +181,7 @@ void System::updateViews(Component * c)
 const View * System::getViewDefinition(string name) 
 {
 	DataViewer* dataViewer;
-	if(map_contains(&dataViewers, name, dataViewer))
+	if(!map_contains(&dataViewers, name, dataViewer))
 	{
 		Logger(Debug) << "Couldn't find view definition for " << name;
 		return NULL;
