@@ -56,11 +56,12 @@ public:
 	void		migrateAllComponents(DerivedSystem* system);
 	const View*	getCurrentViewDefinition();
 private:
+	//DataViewer(){}
 	View	currentViewDefinition;
 
 	//const std::string name;
 	//const int type;
-	System* system;
+	//System* system;
 	
 	// elements
 	std::vector<Component*>	components;
