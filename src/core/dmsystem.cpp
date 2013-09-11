@@ -50,99 +50,11 @@ System::System() : Component(true)
 	DBConnector::getInstance();
 	SQLInsert();
 }
+
 System::System(const System& s) : Component(s, true)
 {
-	/*
-	//predecessors = s.predecessors;
-	lastModule = s.lastModule;
-	//mutex = new QMutex(QMutex::Recursive);
-	SQLInsert();
-
-	currentSys = this;
-
-	std::map<Component*,Component*> childReplaceMap;
-
-	mforeach(Component* oldComp, s.ownedchilds)
-	{
-		// init name generation
-		oldComp->getUUID();
-		// copy elements
-		switch(oldComp->getType())
-		{
-		case DM::COMPONENT:
-			childReplaceMap[oldComp] = addComponent(oldComp->clone());
-			break;
-		case DM::NODE:
-			childReplaceMap[oldComp] = addNode((Node*)oldComp->clone());
-			break;
-		case DM::SUBSYSTEM:
-			childReplaceMap[oldComp] = addSubSystem((System*)oldComp->clone());
-			break;
-		case DM::RASTERDATA:
-			childReplaceMap[oldComp] = addRasterData((RasterData*)oldComp->clone());
-			break;
-		default:    break;
-		}
-	}
-	// copy edges
-	mforeach(Edge* oldEdge, s.edges)
-	{
-		Edge *e = (Edge*)oldEdge->clone();
-		e->setStartpoint((Node*)childReplaceMap[s.findChild(e->getStartNode()->getQUUID())]);
-		e->setEndpoint((Node*)childReplaceMap[s.findChild(e->getEndNode()->getQUUID())]);
-
-		childReplaceMap[oldEdge] = addEdge(e);
-	}
-	// copy faces
-	mforeach(Face* oldFace, s.faces)
-	{
-		std::vector<Node*> faceNodes = oldFace->getNodePointers();
-		for(int i=0;i<faceNodes.size();i++)
-			faceNodes[i] = (Node*)childReplaceMap[faceNodes[i]];
-
-		Face* newFace = this->addFace(faceNodes);
-		childReplaceMap[oldFace] = newFace;
-		mforeach(Attribute* a, oldFace->getAllAttributes())
-			newFace->addAttribute(*a);
-	}
-	// after all faces are initialized, we can copy the holes
-	mforeach(Face* oldFace, s.faces)
-	{
-		Face* f = (Face*)childReplaceMap[oldFace];
-		if(!f)
-		{
-			Logger(Error) << "Not found in child replace map: " << oldFace->getUUID();
-			continue;
-		}
-		std::vector<Face*> faceHoles = oldFace->getHolePointers();
-		foreach(Face* h, oldFace->getHolePointers())
-			f->addHole( (Face*)childReplaceMap[h] );
-	}
-	// update view definitions
-	mforeach(View* v, s.viewdefinitions)
-	{
-		View *newv = new View(*v);
-		viewdefinitions[v->getName()] = newv;
-	}
-	// copy component views
-	for ( std::map<Component*, Component*>::const_iterator it = childReplaceMap.begin(); it != childReplaceMap.end(); ++it  )
-		it->second->inViews = it->first->inViews;
-
-	// update views
-	mforeach(Component* c, ownedchilds)
-		this->updateViews(c);
-
-	// update componentNameMap
-	mforeach(Component *c, s.componentNameMap)
-	{
-		Component *newc = NULL;
-		if(map_contains(&childReplaceMap, c, newc))
-			this->componentNameMap[newc->getUUID()] = newc;
-		else
-			Logger(Error) << "Not found in child replace map: " << c->getUUID();
-	}
-	*/
 }
+
 System::~System()
 {
 	mforeach(Component* c, ownedchilds)
@@ -153,30 +65,12 @@ System::~System()
 	foreach (DM::System * sys, this->sucessors)
 		if (sys)	delete sys;
 
-	//mforeach(View *v, viewdefinitions)
-	//    delete v;
-	// memory leak
-
-	//viewdefinitions.clear();
 	if(this->sucessors.size()==0)
 		mforeach(DataViewer* viewer, dataViewers)
 			delete viewer;
 
 	Component::SQLDelete();
 }
-/*
-void System::updateViews(Component * c) 
-{
-	QMutexLocker ml(mutex);
-
-	if (!c) 
-	{
-		DM::Logger(DM::Error)  << "Component NULL in updateView";
-		return;
-	}
-	foreach(std::string viewName, c->getInViews())
-		this->dataViewers[viewName]->addComponent(c);
-}*/
 
 const View * System::getViewDefinition(string name) 
 {
@@ -209,7 +103,6 @@ Component * System::addComponent(Component* c, const DM::View & view)
 
 	components[c->getQUUID()] = c;
 	addComponentToView(c, view);
-	//this->updateViews(c);
 
 	return c;
 }
@@ -242,7 +135,6 @@ Node* System::addNode(Node* node, const DM::View & view)
 
 	addComponentToView(node, view);
 
-	//this->updateViews(node);
 	return node;
 }
 Node* System::addNode(const Node &ref,  const DM::View & view)
@@ -434,7 +326,6 @@ RasterData * System::addRasterData(RasterData *r, const DM::View & view)
 		r->setView(view.getName());
 	}
 
-	//this->updateViews(r);
 	return r;
 }
 
@@ -603,27 +494,6 @@ bool System::addView(const View& view)
 	if(!map_contains(&dataViewers, view.getName()))
 		this->dataViewers[view.getName()] = new DataViewer(view);
 
-	/*
-	//For each view create one dummy element
-	DM::View  * existingView = this->viewdefinitions[view.getName()];
-	if (!existingView) 
-	{
-		existingView = new View(view);
-		this->viewdefinitions[view.getName()] = existingView;
-	}
-
-	if (!view.writes())
-		return true;
-
-	//extend Dummy Attribute
-	foreach (std::string a , view.getWriteAttributes()) 
-	{
-		DM::Attribute attr(a);
-		attr.setType(view.getAttributeType(a));
-		if (view.getAttributeType(a) == Attribute::LINK)
-			attr.setLink(view.getNameOfLinkedView(a), "");
-	}*/
-
 	return true;
 }
 const std::vector<DM::View> System::getViews()  
@@ -664,7 +534,6 @@ void System::addPredecessors(System *s)
 	this->predecessors.push_back(s);
 	this->SQLUpdateStates();
 }
-
 
 bool System::addChild(Component *newcomponent)
 {

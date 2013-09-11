@@ -249,8 +249,6 @@ protected:
 	virtual const Component* getComponentReadOnly(std::string uuid) const;
 	const Edge* getEdgeReadOnly(Node* start, Node* end);
 private:
-	//void updateViews (Component * c);
-	
 	void SQLInsert();
 	void SQLUpdateStates();
 	bool addChild(Component *newcomponent);
@@ -283,8 +281,6 @@ private:
 	std::map<QUuid, Component*>		ownedchilds;
 
 	std::map<std::string, DataViewer*>	dataViewers;
-	//std::map<std::string, View*>	viewdefinitions;
-	//std::map<std::string, std::map<std::string, Component*> > views;   
 };
 
 typedef std::map<std::string, DM::System*> SystemMap;
