@@ -32,8 +32,6 @@
 
 using namespace DM;
 
-typedef std::map<std::string, std::string> stringmap;
-
 View::View(std::string name, int type, int accesstypeGeometry)
 {
 	this->name = name;
@@ -41,6 +39,7 @@ View::View(std::string name, int type, int accesstypeGeometry)
 	this->accesstypeGeometry = accesstypeGeometry;
 
 }
+
 View::View() 
 {
 	this->name = "";
@@ -99,7 +98,6 @@ bool View::reads() const
 	return false;
 }
 
-
 bool View::writes() const
 {
 	if (this->accesstypeGeometry > READ)
@@ -126,7 +124,6 @@ ACCESS View::getAttributeAccessType(std::string name) const
 	return (ACCESS)a;
 }
 
-
 std::vector<std::string> View::getAllAttributes() const
 {
 	std::vector<std::string> names;
@@ -134,7 +131,6 @@ std::vector<std::string> View::getAllAttributes() const
 		names.push_back(it->first);
 	return names;
 }
-
 
 void View::setAttributeType(std::string name, Attribute::AttributeType type)
 {
@@ -156,6 +152,7 @@ void View::addLinks(string name, std::string linkedViewName)
 std::vector<std::string> View::getNamesOfLinks()
 {
 	std::vector<std::string> namesOfView;
+	typedef std::map<std::string, std::string> stringmap;
 	for (stringmap::const_iterator it = attributeLinks.begin(); it != attributeLinks.end(); ++it) {
 		namesOfView.push_back(it->first);
 	}
