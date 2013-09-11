@@ -249,7 +249,7 @@ protected:
 	virtual const Component* getComponentReadOnly(std::string uuid) const;
 	const Edge* getEdgeReadOnly(Node* start, Node* end);
 private:
-	void updateViews (Component * c);
+	//void updateViews (Component * c);
 	
 	void SQLInsert();
 	void SQLUpdateStates();

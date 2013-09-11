@@ -164,7 +164,7 @@ System::~System()
 
 	Component::SQLDelete();
 }
-
+/*
 void System::updateViews(Component * c) 
 {
 	QMutexLocker ml(mutex);
@@ -176,7 +176,7 @@ void System::updateViews(Component * c)
 	}
 	foreach(std::string viewName, c->getInViews())
 		this->dataViewers[viewName]->addComponent(c);
-}
+}*/
 
 const View * System::getViewDefinition(string name) 
 {
@@ -209,7 +209,7 @@ Component * System::addComponent(Component* c, const DM::View & view)
 
 	components[c->getQUUID()] = c;
 	addComponentToView(c, view);
-	this->updateViews(c);
+	//this->updateViews(c);
 
 	return c;
 }
@@ -242,7 +242,7 @@ Node* System::addNode(Node* node, const DM::View & view)
 
 	addComponentToView(node, view);
 
-	this->updateViews(node);
+	//this->updateViews(node);
 	return node;
 }
 Node* System::addNode(const Node &ref,  const DM::View & view)
@@ -325,7 +325,7 @@ Edge* System::addEdge(Edge* edge, const DM::View & view)
 
 	edges[edge->getQUUID()] = edge;
 	addComponentToView(edge, view);
-	this->updateViews(edge);
+	//this->updateViews(edge);
 
 	return edge;
 }
@@ -383,7 +383,7 @@ Face* System::addFace(Face *f, const DM::View & view)
 
 	faces[f->getQUUID()] = f;
 	addComponentToView(f, view);
-	this->updateViews(f);
+	//this->updateViews(f);
 
 	return f;
 }
@@ -434,7 +434,7 @@ RasterData * System::addRasterData(RasterData *r, const DM::View & view)
 		r->setView(view.getName());
 	}
 
-	this->updateViews(r);
+	//this->updateViews(r);
 	return r;
 }
 
