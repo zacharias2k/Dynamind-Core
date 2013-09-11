@@ -102,7 +102,7 @@ public:
 	/** @brief Adds an existing node to the system. The ownership of the node goes to the system.
 	*  If the node already exists 0 it returns 0, if not the pointer to the node (same as the input)
 	*/
-	Node * addNode(Node* node);
+	Node * addNode(Node* node, const DM::View & view = DM::View());
 
 	/** @brief for Edge::LoadDb() */
 	Node* getNode(QUuid uuid);	// protected for DM::Edge

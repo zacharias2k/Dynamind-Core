@@ -230,7 +230,7 @@ bool System::removeComponent(std::string name)
 	return removeChild(name);
 }
 
-Node* System::addNode(Node* node)
+Node* System::addNode(Node* node, const DM::View & view)
 {
 	QMutexLocker ml(mutex);
 
@@ -240,35 +240,21 @@ Node* System::addNode(Node* node)
 	}
 	nodes[node->getQUUID()] = node;
 
+	addComponentToView(node, view);
+
 	this->updateViews(node);
 	return node;
 }
 Node* System::addNode(const Node &ref,  const DM::View & view)
 {
 	QMutexLocker ml(mutex);
-
-	Node * n = this->addNode(new Node(ref));
-
-	if (n == NULL)
-		return NULL;
-	
-	addComponentToView(n, view);
-
-	return n;
+	return this->addNode(new Node(ref), view);
 }
 
 Node * System::addNode(double x, double y, double z,  const DM::View & view)
 {
 	QMutexLocker ml(mutex);
-
-	Node * n = this->addNode(new Node(x, y, z));
-
-	if (n == NULL)
-		return NULL;
-	
-	addComponentToView(n, view);
-
-	return n;
+	return this->addNode(new Node(x, y, z), view);
 }
 
 Node* System::getNode(std::string uuid)
@@ -346,7 +332,7 @@ Edge* System::addEdge(Edge* edge, const DM::View & view)
 Edge* System::addEdge(Node * start, Node * end, const View &view)
 {
 	QMutexLocker ml(mutex);
-	return this->addEdge(new Edge(start, end));
+	return this->addEdge(new Edge(start, end), view);
 }
 Edge* System::getEdge(std::string uuid)
 {
