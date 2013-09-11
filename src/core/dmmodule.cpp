@@ -243,7 +243,7 @@ void Module::addData(const std::string& streamName, std::vector<View> views)
 
 	foreach(View v, views)
 	{
-		ACCESS a = (ACCESS)v.getAccessType();
+		ViewAccess a = (ViewAccess)v.getAccessType();
 		if(a == READ || a == MODIFY || v.getReadAttributes().size())
 			inPort = true;
 		if(a == WRITE || a == MODIFY || v.getWriteAttributes().size())

@@ -35,7 +35,7 @@
 
 namespace DM {
 
-enum ACCESS
+enum ViewAccess
 {
 	READ,
 	MODIFY,
@@ -133,7 +133,7 @@ public:
 	Attribute::AttributeType getAttributeType(std::string name) const;
 
 	/** @brief Returns Attribute Type */
-	ACCESS getAttributeAccessType(std::string name) const;
+	ViewAccess getAttributeAccessType(std::string name) const;
 
 	/** @brief Sets Attribute Type */
 	void setAttributeType(std::string name, Attribute::AttributeType type);
