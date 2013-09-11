@@ -156,7 +156,7 @@ private:
 
 	std::map<std::string, int> ownedAttributes;
 	std::map<std::string, Attribute::AttributeType> attributeTypes;
-	std::map<std::string, std::string> attributeLinks;
+	std::map<std::string, std::string>	linkedViews;
 };
 }
 

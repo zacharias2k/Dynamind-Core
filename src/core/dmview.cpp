@@ -37,7 +37,6 @@ View::View(std::string name, int type, int accesstypeGeometry)
 	this->name = name;
 	this->type = type;
 	this->accesstypeGeometry = accesstypeGeometry;
-
 }
 
 View::View() 
@@ -51,7 +50,7 @@ View::View(const View& ref):
 	accesstypeGeometry(ref.accesstypeGeometry),
 	ownedAttributes(ref.ownedAttributes), 
 	attributeTypes(ref.attributeTypes),
-	attributeLinks(ref.attributeLinks)
+	linkedViews(ref.linkedViews)
 {
 }
 
@@ -146,23 +145,22 @@ void View::addLinks(string name, std::string linkedViewName)
 {
 	this->addAttribute(name);
 	this->setAttributeType(name, Attribute::LINK);
-	this->attributeLinks[name] = linkedViewName;
+	linkedViews[name] = (linkedViewName);
 }
 
 std::vector<std::string> View::getNamesOfLinks()
 {
 	std::vector<std::string> namesOfView;
 	typedef std::map<std::string, std::string> stringmap;
-	for (stringmap::const_iterator it = attributeLinks.begin(); it != attributeLinks.end(); ++it) {
+	for (stringmap::const_iterator it = linkedViews.begin(); it != linkedViews.end(); ++it)
 		namesOfView.push_back(it->first);
-	}
 	return namesOfView;
 
 }
 
 std::string View::getNameOfLinkedView(string name)
 {
-	return this->attributeLinks[name];
+	return this->linkedViews[name];
 }
 
 
