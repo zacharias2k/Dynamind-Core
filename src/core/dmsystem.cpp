@@ -471,7 +471,7 @@ std::map<std::string, Face*> System::getAllFaces()
 	return f;
 }
 
-bool System::addComponentToView(Component *comp, const View &view) 
+void System::addComponentToView(Component *comp, const View &view) 
 {
 	QMutexLocker ml(mutex);
 
@@ -486,10 +486,7 @@ bool System::addComponentToView(Component *comp, const View &view)
 
 		dataViewer->addComponent(comp);
 		comp->setView(view.getName());
-		return false;
 	}
-
-	return true;
 }
 
 bool System::removeComponentFromView(Component *comp, const View &view) 

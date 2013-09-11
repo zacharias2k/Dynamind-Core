@@ -222,7 +222,7 @@ public:
 	Component* clone();
 
 	/** @brief add a component to a view */
-	bool addComponentToView(Component * comp, const DM::View & view);
+	void addComponentToView(Component * comp, const DM::View & view);
 
 	/** @brief remove a component from a view */
 	bool removeComponentFromView(Component * comp, const DM::View & view);
