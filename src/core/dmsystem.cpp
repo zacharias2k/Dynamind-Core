@@ -390,7 +390,7 @@ Face* System::addFace(Face *f, const DM::View & view)
 Face* System::addFace(std::vector<DM::Node*> nodes, const DM::View & view)
 {
 	QMutexLocker ml(mutex);
-	return this->addFace(new Face(nodes));
+	return this->addFace(new Face(nodes), view);
 }
 Face* System::getFace(std::string uuid)
 {
