@@ -154,8 +154,9 @@ private:
 	std::string name;
 	int accesstypeGeometry;
 
-	std::map<std::string, int> ownedAttributes;
-	std::map<std::string, Attribute::AttributeType> attributeTypes;
+	typedef std::pair<Attribute::AttributeType, ViewAccess> TypeAccessPair;
+	std::map<std::string, TypeAccessPair> linkedAttributes;
+
 	std::map<std::string, std::string>	linkedViews;
 };
 }

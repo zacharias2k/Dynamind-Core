@@ -48,39 +48,50 @@ View::View()
 View::View(const View& ref):
 	name(ref.name), type(ref.type), 
 	accesstypeGeometry(ref.accesstypeGeometry),
-	ownedAttributes(ref.ownedAttributes), 
-	attributeTypes(ref.attributeTypes),
+	//ownedAttributes(ref.ownedAttributes), 
+	//attributeTypes(ref.attributeTypes),
+	linkedAttributes(ref.linkedAttributes),
 	linkedViews(ref.linkedViews)
 {
 }
 
-void View::addAttribute(std::string name) {
-	this->ownedAttributes[name] = WRITE;
-	this->attributeTypes[name] = Attribute::NOTYPE;
+void View::addAttribute(std::string name) 
+{
+	linkedAttributes[name] = TypeAccessPair(Attribute::NOTYPE, WRITE);
+	//this->ownedAttributes[name] = WRITE;
+	//this->attributeTypes[name] = Attribute::NOTYPE;
 }
 
-void View::getAttribute(std::string name) {
-	this->ownedAttributes[name] = READ;
-	this->attributeTypes[name] = Attribute::NOTYPE;
+void View::getAttribute(std::string name) 
+{
+	linkedAttributes[name] = TypeAccessPair(Attribute::NOTYPE, READ);
+	//this->ownedAttributes[name] = READ;
+	//this->attributeTypes[name] = Attribute::NOTYPE;
 }
-void View::modifyAttribute(std::string name) {
-	this->ownedAttributes[name] = MODIFY;
-	this->attributeTypes[name] = Attribute::NOTYPE;
+void View::modifyAttribute(std::string name) 
+{
+	linkedAttributes[name] = TypeAccessPair(Attribute::NOTYPE, MODIFY);
+	//this->ownedAttributes[name] = MODIFY;
+	//this->attributeTypes[name] = Attribute::NOTYPE;
 }
 
-std::vector<std::string> View::getWriteAttributes() const {
+std::vector<std::string> View::getWriteAttributes() const 
+{
 	std::vector<std::string> attrs;
-	for (std::map<std::string, int>::const_iterator it = this->ownedAttributes.begin(); it != this->ownedAttributes.end(); ++it)
-		if (it->second > READ)
+	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
+		it != linkedAttributes.cend();	++it)
+		if (it->second.second > READ)
 			attrs.push_back(it->first);
 
 	return attrs;
 }
 
-std::vector<std::string> View::getReadAttributes() const {
+std::vector<std::string> View::getReadAttributes() const 
+{
 	std::vector<std::string> attrs;
-	for (std::map<std::string, int>::const_iterator it = this->ownedAttributes.begin(); it != this->ownedAttributes.end(); ++it)
-		if (it->second < WRITE)
+	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
+		it != linkedAttributes.cend();	++it)
+		if (it->second.second < WRITE)
 			attrs.push_back(it->first);
 
 	return attrs;
@@ -90,8 +101,9 @@ bool View::reads() const
 {
 	if (this->accesstypeGeometry < WRITE)
 		return true;
-	for (std::map<std::string, int>::const_iterator it = this->ownedAttributes.begin(); it != this->ownedAttributes.end(); ++it)
-		if (it->second < WRITE)
+	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
+		it != linkedAttributes.cend();	++it)
+		if (it->second.second < WRITE)
 			return true;
 
 	return false;
@@ -101,8 +113,9 @@ bool View::writes() const
 {
 	if (this->accesstypeGeometry > READ)
 		return true;
-	for (std::map<std::string, int>::const_iterator it = this->ownedAttributes.begin(); it != this->ownedAttributes.end(); ++it)
-		if (it->second > READ)
+	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
+		it != linkedAttributes.cend();	++it)
+		if (it->second.second > READ)
 			return true;
 
 	return false;
@@ -110,30 +123,31 @@ bool View::writes() const
 
 Attribute::AttributeType View::getAttributeType(std::string name) const
 {
-	std::map<std::string, Attribute::AttributeType>::const_iterator it = attributeTypes.find(name);
-	if(it != attributeTypes.end())
-		return it->second;
+	std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.find(name);
+	if(it != linkedAttributes.end())
+		return it->second.first;
 	return Attribute::NOTYPE;
 }
 
 ViewAccess View::getAttributeAccessType(std::string name) const
 {
-	int a = ViewAccess();
-	map_contains(&ownedAttributes, name, a);
-	return (ViewAccess)a;
+	TypeAccessPair entry;
+	map_contains(&linkedAttributes, name, entry);
+	return (ViewAccess)entry.second;
 }
 
 std::vector<std::string> View::getAllAttributes() const
 {
 	std::vector<std::string> names;
-	for (std::map<std::string, int>::const_iterator it = this->ownedAttributes.begin(); it != this->ownedAttributes.end(); ++it)
+	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
+		it != linkedAttributes.cend();	++it)
 		names.push_back(it->first);
 	return names;
 }
 
 void View::setAttributeType(std::string name, Attribute::AttributeType type)
 {
-	this->attributeTypes[name] = type;
+	this->linkedAttributes[name].first = type;
 }
 
 void View::addLinks(string name, View linkedView)
