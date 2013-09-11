@@ -24,11 +24,9 @@
  *
  */
 
-
 #include "dmview.h"
 #include <dmmodule.h>
 #include <dmattribute.h>
-//#include <dmcomponent.h>
 
 using namespace DM;
 
@@ -45,8 +43,6 @@ View::View():
 View::View(const View& ref):
 	name(ref.name), type(ref.type), 
 	geometryAccess(ref.geometryAccess),
-	//ownedAttributes(ref.ownedAttributes), 
-	//attributeTypes(ref.attributeTypes),
 	linkedAttributes(ref.linkedAttributes),
 	linkedViews(ref.linkedViews)
 {
@@ -55,21 +51,15 @@ View::View(const View& ref):
 void View::addAttribute(std::string name) 
 {
 	linkedAttributes[name] = TypeAccessPair(Attribute::NOTYPE, WRITE);
-	//this->ownedAttributes[name] = WRITE;
-	//this->attributeTypes[name] = Attribute::NOTYPE;
 }
 
 void View::getAttribute(std::string name) 
 {
 	linkedAttributes[name] = TypeAccessPair(Attribute::NOTYPE, READ);
-	//this->ownedAttributes[name] = READ;
-	//this->attributeTypes[name] = Attribute::NOTYPE;
 }
 void View::modifyAttribute(std::string name) 
 {
 	linkedAttributes[name] = TypeAccessPair(Attribute::NOTYPE, MODIFY);
-	//this->ownedAttributes[name] = MODIFY;
-	//this->attributeTypes[name] = Attribute::NOTYPE;
 }
 
 std::vector<std::string> View::getWriteAttributes() const 
