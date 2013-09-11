@@ -142,13 +142,13 @@ public:
 	/** @brief Returns true if the accesstype of the geomtry or from one attribute is modify or write */
 	bool writes() const;
 
-	/** @brief Returns Attribute Type */
+	/** @brief Returns attribute type */
 	Attribute::AttributeType getAttributeType(std::string name) const;
 
-	/** @brief Returns Attribute Type */
+	/** @brief Returns attribute access type */
 	ViewAccess getAttributeAccessType(std::string name) const;
 
-	/** @brief Sets Attribute Type */
+	/** @brief Sets attribute type */
 	void setAttributeType(std::string name, Attribute::AttributeType type);
 
 	/** @brief Adds link attribute */
