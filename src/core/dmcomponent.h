@@ -45,16 +45,6 @@ namespace DM {
 
 #define UUID_ATTRIBUTE_NAME "_uuid"
 
-enum Components 
-{
-	COMPONENT =0,
-	NODE=1,
-	EDGE=2,
-	FACE=3,
-	SUBSYSTEM=4,
-	RASTERDATA=5
-};
-
 class Attribute;
 class System;
 

@@ -28,26 +28,23 @@
 #include "dmview.h"
 #include <dmmodule.h>
 #include <dmattribute.h>
-#include <dmcomponent.h>
+//#include <dmcomponent.h>
 
 using namespace DM;
 
-View::View(std::string name, int type, int accesstypeGeometry)
+View::View(std::string name, Components type, ViewAccess geometryAccess):
+	name(name), type(type), geometryAccess(geometryAccess)
 {
-	this->name = name;
-	this->type = type;
-	this->accesstypeGeometry = accesstypeGeometry;
 }
 
-View::View() 
+View::View():
+	name(""), type(NOTYPE), geometryAccess(NOACCESS)
 {
-	this->name = "";
-	this->type = -1;
 }
 
 View::View(const View& ref):
 	name(ref.name), type(ref.type), 
-	accesstypeGeometry(ref.accesstypeGeometry),
+	geometryAccess(ref.geometryAccess),
 	//ownedAttributes(ref.ownedAttributes), 
 	//attributeTypes(ref.attributeTypes),
 	linkedAttributes(ref.linkedAttributes),
@@ -99,7 +96,7 @@ std::vector<std::string> View::getReadAttributes() const
 
 bool View::reads() const
 {
-	if (this->accesstypeGeometry < WRITE)
+	if (this->geometryAccess < WRITE)
 		return true;
 	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
 		it != linkedAttributes.cend();	++it)
@@ -111,7 +108,7 @@ bool View::reads() const
 
 bool View::writes() const
 {
-	if (this->accesstypeGeometry > READ)
+	if (this->geometryAccess > READ)
 		return true;
 	for(std::map<std::string, TypeAccessPair>::const_iterator it = linkedAttributes.cbegin();
 		it != linkedAttributes.cend();	++it)

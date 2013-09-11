@@ -34,9 +34,21 @@
 #include <dmattribute.h>
 
 namespace DM {
+	
+enum Components 
+{
+	NOTYPE		= -1,
+	COMPONENT	= 0,
+	NODE		= 1,
+	EDGE		= 2,
+	FACE		= 3,
+	SUBSYSTEM	= 4,
+	RASTERDATA	= 5
+};
 
 enum ViewAccess
 {
+	NOACCESS = -1,
 	READ,
 	MODIFY,
 	WRITE
@@ -82,11 +94,12 @@ enum ViewAccess
   * @author Christian Urich
   * @date 11.03.2012
   */
+
 class DM_HELPER_DLL_EXPORT View
 {
 public:
 	/** @brief Default constructor to create a new view */
-	View(std::string name, int type, int accesstypeGeometry = READ);
+	View(std::string name, Components type, ViewAccess geometryAccess = READ);
 	View();
 	View(const View& ref);
 
@@ -112,16 +125,16 @@ public:
 	std::vector<std::string>  getReadAttributes  () const;
 
 	/** @brief Set Type */
-	void setType(int type) {this->type=type;}
+	void setType(Components type) {this->type = type;}
 
 	/** @brief Return Type */
-	int const & getType() const {return type;}
+	Components getType() const {return type;}
 
 	/** @brief Return AccessType of the Geometry */
-	int const & getAccessType() const{return accesstypeGeometry;}
+	ViewAccess getAccessType() const {return geometryAccess;}
 
 	/** @brief set AccessType of the Geometry */
-	void setAccessType(int Type) {this->accesstypeGeometry = Type;}
+	void setAccessType(ViewAccess geometryAccess) {this->geometryAccess = geometryAccess;}
 
 	/** @brief Returns true if the accesstype of the geomtry or from one attribute is modify or read */
 	bool reads() const;
@@ -150,9 +163,9 @@ public:
 
 	std::vector<std::string> getAllAttributes() const;
 private:
-	int type;
 	std::string name;
-	int accesstypeGeometry;
+	Components type;
+	ViewAccess geometryAccess;
 
 	typedef std::pair<Attribute::AttributeType, ViewAccess> TypeAccessPair;
 	std::map<std::string, TypeAccessPair> linkedAttributes;
