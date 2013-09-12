@@ -31,16 +31,15 @@
 
 namespace DM {
 	
-class DataFilter
+struct DataFilter
 {
-public:
 	enum CoordinateTarget
 	{
 		X,Y,Z,None
 	};
 	enum Operator
 	{
-		GREATER, GREATEREQUAL, LESS, LESSEQUAL,
+		GREATER, GREATEREQUAL, LESS, LESSEQUAL, EQUAL, 
 	};
 
 	DataFilter(CoordinateTarget coord, Operator op, double value):
@@ -49,11 +48,17 @@ public:
 	DataFilter(std::string attributeName, Operator op, double value):
 		attributeName(attributeName), coord(None), op(op), value(value)
 	{}
-	/*DataFilter(const DataFilter& ref):
-		attributeName(ref.attributeName), coord(ref.coord), 
-		op(ref.op), value(ref.value)
-	{}*/
-private:
+
+	bool operator == (const DataFilter& ref)
+	{
+		if(attributeName != ref.attributeName)	return false;
+		if(coord != ref.coord)					return false;
+		if(op != ref.op)						return false;
+		if(value != ref.value)					return false;
+
+		return true;
+	}
+
 	const std::string		attributeName;
 	const CoordinateTarget	coord;
 	const Operator			op;

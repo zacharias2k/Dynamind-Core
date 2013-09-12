@@ -24,10 +24,14 @@
  */
 
 #include "dmdataviewer.h"
+#include "dmdatafilter.h"
+#include "dmview.h"
 #include "dmcomponent.h"
 #include "dmsystem.h"
 #include "dmlogger.h"
 #include "dmderivedsystem.h"
+#include <vector>
+#include <dmnode.h>
 
 using namespace DM;
 
@@ -60,12 +64,94 @@ bool DataViewer::removeComponent(Component* component)
 	return false;
 }
 
+bool ApplyFilter(Component* c, DataFilter* filter)
+{
+	if(filter->attributeName.empty())
+	{
+		if(Node* n = dynamic_cast<Node*>(c))
+		{
+			double value = n->get(filter->coord);
+			
+			if(filter->op == DataFilter::GREATER)
+				return value > filter->value;
+			else if(filter->op == DataFilter::GREATEREQUAL)
+				return value >= filter->value;
+			else if(filter->op == DataFilter::LESS)
+				return value < filter->value;
+			else if(filter->op == DataFilter::LESSEQUAL)
+				return value <= filter->value;
+			else if(filter->op == DataFilter::EQUAL)
+				return value == filter->value;
+		}
+	}
+}
+
+void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter*> filters)
+{
+	std::vector<Component*> newComponentList;
+	foreach(Component* c, componentList)
+	{
+		bool excluded = false;
+		foreach(DataFilter* filter, filters)
+			if(!ApplyFilter(c, filter))
+				excluded = true;
+
+		if(!excluded)
+			newComponentList.push_back(c);
+	}
+
+	componentList = newComponentList;
+}
+
 void DataViewer::update(const View& view)
 {
 	if(view.getName() != currentViewDefinition.getName())
 	{
 		Logger(Warning) << "DataViewer update failed";
 		return;
+	}
+	// check if we need to completly renew filteredComponents
+	bool renewFilteredComponents = false;
+	foreach(DataFilter* newFilter, currentViewDefinition.getFilters())
+	{
+		bool isMissing = true;
+		foreach(DataFilter* oldFilter, view.getFilters())
+			if(*oldFilter == *newFilter)
+			{
+				isMissing = false;
+				break;
+			}
+		if(isMissing)
+		{
+			renewFilteredComponents = true;
+			break;
+		}
+	}
+
+	if(renewFilteredComponents)
+	{
+		// recreate filteredComponents
+		filteredComponents = components;
+		ApplyFilters(filteredComponents, view.getFilters());
+	}
+	else
+	{
+		// adapt filteredComponents
+		std::vector<DataFilter*> newFilters;
+		foreach(DataFilter* newFilter, view.getFilters())
+		{
+			bool isNew = true;
+			foreach(DataFilter* oldFilter, currentViewDefinition.getFilters())
+				if(*oldFilter == *newFilter)
+				{
+					isNew = false;
+					break;
+				}
+
+			if(isNew)
+				newFilters.push_back(newFilter);
+		}
+		ApplyFilters(filteredComponents, newFilters);
 	}
 	currentViewDefinition = view;
 }

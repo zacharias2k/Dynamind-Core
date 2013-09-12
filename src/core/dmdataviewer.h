@@ -53,8 +53,9 @@ public:
 private:
 	DataViewer(const DataViewer&){}
 	View	currentViewDefinition;
-
+	
 	std::vector<Component*>	components;
+	std::vector<Component*>	filteredComponents;
 };
 
 }

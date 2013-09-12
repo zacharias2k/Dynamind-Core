@@ -177,6 +177,11 @@ void View::addFilter(const DataFilter& filter)
 	filters.push_back(new DataFilter(filter));
 }
 
+const std::vector<DataFilter*>& View::getFilters() const
+{
+	return filters;
+}
+
 void View::clearFilters()
 {
 	foreach(DataFilter* f, filters)
