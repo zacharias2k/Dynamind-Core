@@ -32,8 +32,9 @@
 using namespace DM;
 
 DataViewer::DataViewer(const View& view):
-	currentViewDefinition(view)
+	currentViewDefinition()
 {
+	update(view);
 }
 
 std::vector<Component*>	DataViewer::getComponents() const
