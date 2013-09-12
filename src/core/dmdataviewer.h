@@ -52,6 +52,7 @@ public:
 	void		migrateAllComponents(DerivedSystem* system);
 	const View*	getCurrentViewDefinition();
 private:
+	DataViewer(const DataViewer&){}
 	View	currentViewDefinition;
 
 	std::vector<Component*>	components;
