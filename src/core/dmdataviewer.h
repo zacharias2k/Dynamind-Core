@@ -56,19 +56,9 @@ public:
 	void		migrateAllComponents(DerivedSystem* system);
 	const View*	getCurrentViewDefinition();
 private:
-	//DataViewer(){}
 	View	currentViewDefinition;
 
-	//const std::string name;
-	//const int type;
-	//System* system;
-	
-	// elements
 	std::vector<Component*>	components;
-	//std::set<std::string>	attributes;
-	// temporary access setup
-	//ACCESS componentAccess;
-	//std::map<std::string, ACCESS> attributeAccessMap;
 };
 
 }
