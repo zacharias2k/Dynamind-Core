@@ -36,7 +36,7 @@ DataViewer::DataViewer(const View& view):
 {
 }
 
-std::vector<Component*>	DataViewer::getComponents(const DataFilter& filter) const
+std::vector<Component*>	DataViewer::getComponents() const
 {
 	return components;
 }

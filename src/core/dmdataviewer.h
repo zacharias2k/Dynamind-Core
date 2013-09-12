@@ -36,16 +36,12 @@ class Component;
 class System;
 class DerivedSystem;
 
-class DataFilter
-{
-};
-
 class DataViewer
 {
 public:
 	DataViewer(const View& view);
 
-	std::vector<Component*>	getComponents(const DataFilter& filter = DataFilter()) const;
+	std::vector<Component*>	getComponents() const;
 	//std::vector<Attribute*>	getAttributes(	const std::string name, 
 	//										const DataFilter& filter = DataFilter());
 	void		addComponent(Component* component);
