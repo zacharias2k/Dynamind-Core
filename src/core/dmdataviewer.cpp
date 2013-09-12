@@ -34,6 +34,8 @@ using namespace DM;
 DataViewer::DataViewer(const View& view):
 	currentViewDefinition()
 {
+	currentViewDefinition = view;
+	currentViewDefinition.clearFilters();
 	update(view);
 }
 
