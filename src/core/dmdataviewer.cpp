@@ -84,6 +84,7 @@ bool ApplyFilter(Component* c, DataFilter* filter)
 				return value == filter->value;
 		}
 	}
+	return true;
 }
 
 void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter*> filters)
