@@ -27,6 +27,7 @@
 #include "dmview.h"
 #include <dmmodule.h>
 #include <dmattribute.h>
+#include <dmdatafilter.h>
 
 using namespace DM;
 
@@ -44,8 +45,15 @@ View::View(const View& ref):
 	name(ref.name), type(ref.type), 
 	geometryAccess(ref.geometryAccess),
 	linkedAttributes(ref.linkedAttributes),
-	linkedViews(ref.linkedViews)
+	linkedViews(ref.linkedViews),
+	filters(ref.filters)
 {
+}
+
+View::~View()
+{
+	foreach(DataFilter* f, filters)
+		delete f;
 }
 
 void View::addAttribute(std::string name) 
@@ -164,4 +172,7 @@ std::string View::getNameOfLinkedView(string name)
 	return this->linkedViews[name];
 }
 
-
+void View::addFilter(const DataFilter& filter)
+{
+	filters.push_back(new DataFilter(filter));
+}

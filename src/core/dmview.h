@@ -95,6 +95,8 @@ enum ACCESS
   * @date 11.03.2012
   */
 
+class DataFilter;
+
 class DM_HELPER_DLL_EXPORT View
 {
 public:
@@ -102,6 +104,7 @@ public:
 	View(std::string name, Components type, ACCESS geometryAccess = READ);
 	View();
 	View(const View& ref);
+	~View();
 
 	/** @brief add attributes that to write by added by the module*/
 	void addAttribute(std::string name);
@@ -162,14 +165,17 @@ public:
 	std::string getNameOfLinkedView(std::string name);
 
 	std::vector<std::string> getAllAttributes() const;
+
+	void addFilter(const DataFilter& filter);
 private:
 	std::string name;
-	Components type;
-	ACCESS geometryAccess;
+	Components	type;
+	ACCESS		geometryAccess;
+
+	std::vector<DataFilter*> filters;
 
 	typedef std::pair<Attribute::AttributeType, ACCESS> TypeAccessPair;
 	std::map<std::string, TypeAccessPair> linkedAttributes;
-
 	std::map<std::string, std::string>	linkedViews;
 };
 }
