@@ -44,10 +44,6 @@ std::vector<Component*>	DataViewer::getComponents() const
 	return components;
 }
 
-/*std::vector<Attribute*>	DataViewer::getAttributes(const std::string name, const DataFilter& filter)
-{
-}*/
-
 void DataViewer::addComponent(Component* component)
 {
 	components.push_back(component);
@@ -80,9 +76,7 @@ void DataViewer::migrateComponent(const Component* src, Component* dest)
 	{
 		std::vector<Component*>::iterator it = find(components.begin(), components.end(), src);
 		if(it != components.end())
-		{
 			*it = dest;
-		}
 	}
 }
 

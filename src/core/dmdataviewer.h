@@ -40,17 +40,16 @@ class DataViewer
 {
 public:
 	DataViewer(const View& view);
-
-	std::vector<Component*>	getComponents() const;
-	//std::vector<Attribute*>	getAttributes(	const std::string name, 
-	//										const DataFilter& filter = DataFilter());
-	void		addComponent(Component* component);
-	bool		removeComponent(Component* component);
-
-	void		update(const View& view);
-	void		migrateComponent(const Component* src, Component* dest);
-	void		migrateAllComponents(DerivedSystem* system);
+	
 	const View*	getCurrentViewDefinition();
+	std::vector<Component*>	getComponents() const;
+
+	void	addComponent(Component* component);
+	bool	removeComponent(Component* component);
+
+	void	update(const View& view);
+	void	migrateComponent(const Component* src, Component* dest);
+	void	migrateAllComponents(DerivedSystem* system);
 private:
 	DataViewer(const DataViewer&){}
 	View	currentViewDefinition;
