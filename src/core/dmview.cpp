@@ -176,3 +176,10 @@ void View::addFilter(const DataFilter& filter)
 {
 	filters.push_back(new DataFilter(filter));
 }
+
+void View::clearFilters()
+{
+	foreach(DataFilter* f, filters)
+		delete f;
+	filters.clear();
+}

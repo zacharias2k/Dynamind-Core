@@ -167,6 +167,8 @@ public:
 	std::vector<std::string> getAllAttributes() const;
 
 	void addFilter(const DataFilter& filter);
+
+	void clearFilters();
 private:
 	std::string name;
 	Components	type;
