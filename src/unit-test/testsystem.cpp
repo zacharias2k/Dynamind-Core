@@ -325,7 +325,7 @@ TEST_F(TestSystem,successorViewTest)
 
 	System* sys = new System;
 	View view("viewName", NODE, MODIFY);
-	sys->addView(view);
+	//sys->addView(view);
 	Node* node = sys->addNode(1,2,3, view);
 	System* suc_sys = sys->createSuccessor();
 	std::map<std::string, Component*> comps = suc_sys->getAllComponentsInView(view);
