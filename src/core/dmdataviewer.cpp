@@ -39,7 +39,7 @@ DataViewer::DataViewer(const View& view):
 	update(view);
 }
 
-std::vector<Component*>	DataViewer::getComponents() const
+const std::vector<Component*>& DataViewer::getComponents() const
 {
 	return components;
 }

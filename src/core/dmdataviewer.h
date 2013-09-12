@@ -42,7 +42,7 @@ public:
 	DataViewer(const View& view);
 	
 	const View*	getCurrentViewDefinition();
-	std::vector<Component*>	getComponents() const;
+	const std::vector<Component*>& getComponents() const;
 
 	void	addComponent(Component* component);
 	bool	removeComponent(Component* component);
