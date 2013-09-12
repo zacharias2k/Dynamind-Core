@@ -371,7 +371,7 @@ void System::addComponentToView(Component *comp, const View &view)
 	{
 		if(!map_contains(&dataViewers, view.getName(), dataViewer))
 		{
-			this->addView(view);
+			this->addDataViewer(view);
 			dataViewer = dataViewers[view.getName()];
 		}
 
@@ -488,14 +488,17 @@ Component* System::clone()
 	return new System(*this);
 }
 
-bool System::addView(const View& view)
+bool System::addDataViewer(const View& view)
 {
 	QMutexLocker ml(mutex);
 	if(!map_contains(&dataViewers, view.getName()))
 		this->dataViewers[view.getName()] = new DataViewer(view);
+	else
+		this->dataViewers[view.getName()]->update(view);
 
 	return true;
 }
+
 const std::vector<DM::View> System::getViews()  
 {
 	std::vector<DM::View> viewlist;

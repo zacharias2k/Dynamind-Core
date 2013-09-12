@@ -304,13 +304,8 @@ System* Module::getData(const std::string& streamName)
 			sys = new System();
 	}
 
-	//bool readOnly = true;
-	mforeach(View v, accessedViews[streamName])
-	{
-		sys->addView(v);
-		//if(v.getAccessType() != READ || v.getWriteAttributes().size() > 0)
-		//	readOnly = false;
-	}
+	mforeach(const View& v, accessedViews[streamName])
+		sys->addDataViewer(v);
 
 	if(hasOutPort(streamName))
 		this->setOutPortData(streamName, sys);

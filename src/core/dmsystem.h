@@ -210,7 +210,7 @@ public:
 	System* createSuccessor();
 
 	/** @brief Adds a new view to the system. At the moment always returns true */
-	bool addView(const DM::View& view);
+	bool addDataViewer(const DM::View& view);
 
 	/** @brief return a vector of views avalible in the system */
 	const std::vector<DM::View> getViews();
