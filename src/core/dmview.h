@@ -46,7 +46,7 @@ enum Components
 	RASTERDATA	= 5
 };
 
-enum ViewAccess
+enum ACCESS
 {
 	NOACCESS = -1,
 	READ,
@@ -99,7 +99,7 @@ class DM_HELPER_DLL_EXPORT View
 {
 public:
 	/** @brief Default constructor to create a new view */
-	View(std::string name, Components type, ViewAccess geometryAccess = READ);
+	View(std::string name, Components type, ACCESS geometryAccess = READ);
 	View();
 	View(const View& ref);
 
@@ -131,10 +131,10 @@ public:
 	Components getType() const {return type;}
 
 	/** @brief Return AccessType of the Geometry */
-	ViewAccess getAccessType() const {return geometryAccess;}
+	ACCESS getAccessType() const {return geometryAccess;}
 
 	/** @brief set AccessType of the Geometry */
-	void setAccessType(ViewAccess geometryAccess) {this->geometryAccess = geometryAccess;}
+	void setAccessType(ACCESS geometryAccess) {this->geometryAccess = geometryAccess;}
 
 	/** @brief Returns true if the accesstype of the geomtry or from one attribute is modify or read */
 	bool reads() const;
@@ -146,7 +146,7 @@ public:
 	Attribute::AttributeType getAttributeType(std::string name) const;
 
 	/** @brief Returns attribute access type */
-	ViewAccess getAttributeAccessType(std::string name) const;
+	ACCESS getAttributeAccessType(std::string name) const;
 
 	/** @brief Sets attribute type */
 	void setAttributeType(std::string name, Attribute::AttributeType type);
@@ -165,9 +165,9 @@ public:
 private:
 	std::string name;
 	Components type;
-	ViewAccess geometryAccess;
+	ACCESS geometryAccess;
 
-	typedef std::pair<Attribute::AttributeType, ViewAccess> TypeAccessPair;
+	typedef std::pair<Attribute::AttributeType, ACCESS> TypeAccessPair;
 	std::map<std::string, TypeAccessPair> linkedAttributes;
 
 	std::map<std::string, std::string>	linkedViews;

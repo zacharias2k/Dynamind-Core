@@ -30,7 +30,7 @@
 
 using namespace DM;
 
-View::View(std::string name, Components type, ViewAccess geometryAccess):
+View::View(std::string name, Components type, ACCESS geometryAccess):
 	name(name), type(type), geometryAccess(geometryAccess)
 {
 }
@@ -116,11 +116,11 @@ Attribute::AttributeType View::getAttributeType(std::string name) const
 	return Attribute::NOTYPE;
 }
 
-ViewAccess View::getAttributeAccessType(std::string name) const
+ACCESS View::getAttributeAccessType(std::string name) const
 {
 	TypeAccessPair entry;
 	map_contains(&linkedAttributes, name, entry);
-	return (ViewAccess)entry.second;
+	return entry.second;
 }
 
 std::vector<std::string> View::getAllAttributes() const
