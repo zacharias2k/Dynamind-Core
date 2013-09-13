@@ -39,20 +39,22 @@ class DerivedSystem;
 class DataViewer
 {
 public:
-	DataViewer(const View& view);
-	DataViewer(const DataViewer&);
+	DataViewer(const View& view, System* owningSystem);
+	DataViewer(const DataViewer& ref, System* owningSystem);
 	
 	const View*	getCurrentViewDefinition();
-	const std::vector<Component*>& getComponents() const;
+	const std::vector<Component*>& getComponents();
 
 	void	addComponent(Component* component);
 	bool	removeComponent(Component* component);
 
 	void	update(const View& view);
 	void	migrateComponent(const Component* src, Component* dest);
-	void	migrateAllComponents(DerivedSystem* system);
+	void	migrateAllComponents(DerivedSystem* targetSystem);
 private:
+	DataViewer(const DataViewer& ref){}	// prevent from copy without system init
 	View	currentViewDefinition;
+	System*	owningSystem;
 	
 	std::vector<Component*>	components;
 	std::vector<Component*>	filteredComponents;

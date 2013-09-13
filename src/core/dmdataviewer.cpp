@@ -75,24 +75,30 @@ void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter
 	componentList = newComponentList;
 }
 
-DataViewer::DataViewer(const View& view):
-	currentViewDefinition()
+DataViewer::DataViewer(const View& view, System* owningSystem):
+	currentViewDefinition(),
+	owningSystem(owningSystem)
 {
 	currentViewDefinition = view;
 	currentViewDefinition.clearFilters();
 	update(view);
 }
 
-DataViewer::DataViewer(const DataViewer& ref):
+DataViewer::DataViewer(const DataViewer& ref, System* owningSystem):
 	components(ref.components),
 	currentViewDefinition(ref.currentViewDefinition),
-	filteredComponents(ref.filteredComponents)
+	filteredComponents(ref.filteredComponents),
+	owningSystem(owningSystem)
 {
 
 }
 
-const std::vector<Component*>& DataViewer::getComponents() const
+const std::vector<Component*>& DataViewer::getComponents()
 {
+	DerivedSystem* sys = dynamic_cast<DerivedSystem*>(owningSystem);
+	if( sys != NULL && currentViewDefinition.writes())
+		this->migrateAllComponents(sys);
+
 	return filteredComponents;
 }
 
@@ -187,11 +193,16 @@ void DataViewer::migrateComponent(const Component* src, Component* dest)
 	}
 }
 
-void DataViewer::migrateAllComponents(DerivedSystem* system)
+void DataViewer::migrateAllComponents(DerivedSystem* targetSystem)
 {
-	std::vector<Component*> predecComponents = components;
-	foreach(Component* c, predecComponents)
-		migrateComponent(c, system->getComponent(c->getUUID()));
+	//std::vector<Component*> predecComponents = components;
+	//foreach(Component* c, predecComponents)
+	//	migrateComponent(c, targetSystem->getComponent(c->getUUID()));
+
+	// copy stuff from successor
+	foreach(Component* c, components)
+		if(c->getCurrentSystem() != owningSystem)
+			this->migrateComponent(c, targetSystem->SuccessorCopyTypesafe(c));
 }
 
 const View* DataViewer::getCurrentViewDefinition()
