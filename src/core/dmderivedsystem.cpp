@@ -42,7 +42,11 @@ DerivedSystem::DerivedSystem(System* sys): System()
 	allSubSystemsLoaded = false;
 	//allRasterDataLoaded = false;
 
-	dataViewers = sys->dataViewers;
+	
+
+	mforeach(DataViewer *viewer, sys->dataViewers)
+		//addDataViewer(*viewer->getCurrentViewDefinition());
+		dataViewers[viewer->getCurrentViewDefinition()->getName()] = new DataViewer(*viewer);
 
 	//viewdefinitions = sys->viewdefinitions;
 	//predecessors = sys->predecessors;
