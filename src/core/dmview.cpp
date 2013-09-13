@@ -42,7 +42,8 @@ View::View():
 }
 
 View::View(const View& ref):
-	name(ref.name), type(ref.type), 
+	name(ref.name), 
+	type(ref.type), 
 	geometryAccess(ref.geometryAccess),
 	linkedAttributes(ref.linkedAttributes),
 	linkedViews(ref.linkedViews)
@@ -54,6 +55,7 @@ View::View(const View& ref):
 View& View::operator=(const View& ref)
 {
 	this->name = ref.name;
+	this->type = ref.type;
 	this->geometryAccess = ref.geometryAccess;
 	this->linkedAttributes = ref.linkedAttributes;
 	this->linkedViews = ref.linkedViews;
