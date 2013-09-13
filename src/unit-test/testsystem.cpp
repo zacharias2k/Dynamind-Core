@@ -331,10 +331,21 @@ TEST_F(TestSystem,successorViewTest)
 	//sys->addView(view);
 	Node* node = sys->addNode(1,2,3, view);
 	System* suc_sys = sys->createSuccessor();
+
+	// change to read access
+	suc_sys->addDataViewer(View("viewName", NODE, READ));
 	std::map<std::string, Component*> comps = suc_sys->getAllComponentsInView(view);
 	ASSERT_TRUE(comps.size() == 1);
 	Component* successor_node = comps.begin()->second;
+	ASSERT_TRUE(successor_node == node);
+	
+	// back to modify access
+	suc_sys->addDataViewer(View("viewName", NODE, MODIFY));
+	comps = suc_sys->getAllComponentsInView(view);
+	ASSERT_TRUE(comps.size() == 1);
+	successor_node = comps.begin()->second;
 	ASSERT_TRUE(successor_node != node);
+
 	delete sys;
 }
 
@@ -804,17 +815,21 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	
 	// adding filter to view afterwards shouldn't change anything
 	view.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 2.0));
+	sys.addDataViewer(view);
 	componentsInView = sys.getAllComponentsInView(view);
-	ASSERT_EQ(1, componentsInView.size());
-	ASSERT_TRUE(componentsInView.begin()->second == n2);
+	ASSERT_EQ(0, componentsInView.size());
 
+	/*
 	// check successing system
 	System* suc_sys = sys.createSuccessor();
+	// update view
+	suc_sys->addDataViewer(view);
+
 	componentsInView = suc_sys->getAllComponentsInView(view);
 	ASSERT_EQ(1, componentsInView.size());
-	ASSERT_TRUE(componentsInView.begin()->second == n2);
+	ASSERT_TRUE(componentsInView.begin()->second == n2);	// read only!
+	*/
 	
-
 }
 
 }
