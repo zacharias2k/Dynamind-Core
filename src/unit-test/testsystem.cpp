@@ -791,17 +791,29 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	
 	View view("testview", NODE, READ);
 	view.addFilter(DataFilter(DataFilter::X, DataFilter::GREATER, 1.0));
-	view.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 4.0));
+	view.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 3.0));
 
 	System sys;
-	//sys.addDataViewer(view);
-	sys.addNode(1,1,1, view);
-	sys.addNode(2,2,2, view);
-	sys.addNode(3,3,3, view);
-	sys.addNode(4,4,4, view);
+	Node* n1 = sys.addNode(1,1,1, view);
+	Node* n2 = sys.addNode(2,2,2, view);
+	Node* n3 = sys.addNode(3,3,3, view);
 	std::map<std::string, Component*> componentsInView = sys.getAllComponentsInView(view);
+	// check if n2 is the only element
+	ASSERT_EQ(1, componentsInView.size());
+	ASSERT_TRUE(componentsInView.begin()->second == n2);
 	
-	ASSERT_TRUE(componentsInView.size() == 2);
+	// adding filter to view afterwards shouldn't change anything
+	view.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 2.0));
+	componentsInView = sys.getAllComponentsInView(view);
+	ASSERT_EQ(1, componentsInView.size());
+	ASSERT_TRUE(componentsInView.begin()->second == n2);
+
+	// check successing system
+	System* suc_sys = sys.createSuccessor();
+	componentsInView = suc_sys->getAllComponentsInView(view);
+	ASSERT_EQ(1, componentsInView.size());
+	ASSERT_TRUE(componentsInView.begin()->second == n2);
+	
 
 }
 
