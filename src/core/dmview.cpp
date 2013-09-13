@@ -45,9 +45,21 @@ View::View(const View& ref):
 	name(ref.name), type(ref.type), 
 	geometryAccess(ref.geometryAccess),
 	linkedAttributes(ref.linkedAttributes),
-	linkedViews(ref.linkedViews),
-	filters(ref.filters)
+	linkedViews(ref.linkedViews)
 {
+	foreach(DataFilter* f, ref.filters)
+		this->filters.push_back(new DataFilter(*f));
+}
+
+View& View::operator=(const View& ref)
+{
+	this->name = ref.name;
+	this->geometryAccess = ref.geometryAccess;
+	this->linkedAttributes = ref.linkedAttributes;
+	this->linkedViews = ref.linkedViews;
+	foreach(DataFilter* f, ref.filters)
+		this->filters.push_back(new DataFilter(*f));
+	return *this;
 }
 
 View::~View()

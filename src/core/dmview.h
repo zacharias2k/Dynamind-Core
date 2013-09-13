@@ -106,6 +106,8 @@ public:
 	View(const View& ref);
 	~View();
 
+	View& operator= (const View& ref);
+
 	/** @brief add attributes that to write by added by the module*/
 	void addAttribute(std::string name);
 
