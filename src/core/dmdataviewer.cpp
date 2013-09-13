@@ -83,6 +83,14 @@ DataViewer::DataViewer(const View& view):
 	update(view);
 }
 
+DataViewer::DataViewer(const DataViewer& ref):
+	components(ref.components),
+	currentViewDefinition(ref.currentViewDefinition),
+	filteredComponents(ref.filteredComponents)
+{
+
+}
+
 const std::vector<Component*>& DataViewer::getComponents() const
 {
 	return filteredComponents;

@@ -40,6 +40,7 @@ class DataViewer
 {
 public:
 	DataViewer(const View& view);
+	DataViewer(const DataViewer&);
 	
 	const View*	getCurrentViewDefinition();
 	const std::vector<Component*>& getComponents() const;
@@ -51,7 +52,6 @@ public:
 	void	migrateComponent(const Component* src, Component* dest);
 	void	migrateAllComponents(DerivedSystem* system);
 private:
-	DataViewer(const DataViewer&){}
 	View	currentViewDefinition;
 	
 	std::vector<Component*>	components;
