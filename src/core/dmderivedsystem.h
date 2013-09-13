@@ -50,6 +50,8 @@ private:
 public:
 	DerivedSystem(System* sys);
 
+	Component* SuccessorCopyTypesafe(const Component *src);
+
 	//Node* getNode(QUuid uuid);
 	Component* getComponent(std::string uuid);
 	Node* getNode(std::string uuid);
@@ -63,7 +65,7 @@ public:
 	std::map<std::string, Face*> getAllFaces();
 	std::map<std::string, System*> getAllSubSystems();
 	std::map<std::string, RasterData*> getAllRasterData();
-	std::map<std::string, Component*> getAllComponentsInView(const DM::View & view);
+	//std::map<std::string, Component*> getAllComponentsInView(const DM::View & view);
 };
 
 }

@@ -46,7 +46,7 @@ DerivedSystem::DerivedSystem(System* sys): System()
 
 	mforeach(DataViewer *viewer, sys->dataViewers)
 		//addDataViewer(*viewer->getCurrentViewDefinition());
-		dataViewers[viewer->getCurrentViewDefinition()->getName()] = new DataViewer(*viewer);
+		dataViewers[viewer->getCurrentViewDefinition()->getName()] = new DataViewer(*viewer, this);
 
 	//viewdefinitions = sys->viewdefinitions;
 	//predecessors = sys->predecessors;
@@ -97,6 +97,26 @@ Face* DerivedSystem::SuccessorCopy(const Face *src)
 		newf->addHole(getFace(hole->getUUID()));
 
 	return addFace(newf);
+}
+
+Component* DerivedSystem::SuccessorCopyTypesafe(const Component *src)
+{
+	switch(src->getType())
+	{
+	case NODE:
+		return SuccessorCopy((Node*)src);
+	case EDGE:
+		return SuccessorCopy((Edge*)src);
+	case FACE:
+		return SuccessorCopy((Face*)src);
+	case RASTERDATA:
+		return (Component*)src;
+	case SUBSYSTEM:
+	case COMPONENT:
+		return SuccessorCopy(src);
+	default:
+		return NULL;
+	}
 }
 
 const Component* DerivedSystem::getComponentReadOnly(std::string uuid) const
@@ -186,7 +206,7 @@ std::map<std::string, Component*> DerivedSystem::getAllComponents()
 	}
 	return System::getAllComponents();
 }
-
+/*
 std::map<std::string, Component*> DerivedSystem::getAllComponentsInView(const DM::View & view)
 {
 	const std::map<std::string, Component*> &predec_comps = System::getAllComponentsInView(view);
@@ -198,22 +218,17 @@ std::map<std::string, Component*> DerivedSystem::getAllComponentsInView(const DM
 		std::map<std::string, Component*> comps;
 		DataViewer* dataViewer;
 		if(map_contains(&dataViewers, view.getName(), dataViewer))
-		{
-			// reload all components
-			dataViewer->migrateAllComponents(this);
-
 			foreach(Component* c, dataViewer->getComponents())
 				comps[c->getUUID()] = c;
-		}
 		return comps;
-		/*
+		
 		std::map<std::string, Component*> comps = views[view.getName()];
 		for(std::map<std::string, Component*>::iterator it = comps.begin(); it != comps.end(); ++it)
 			it->second = getComponent(it->first);
 
-		return comps;*/
+		return comps;
 	}
-}
+}*/
 std::map<std::string, Node*> DerivedSystem::getAllNodes()
 {
 	if(!allNodesLoaded)
