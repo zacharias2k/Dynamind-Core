@@ -813,23 +813,22 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	ASSERT_EQ(1, componentsInView.size());
 	ASSERT_TRUE(componentsInView.begin()->second == n2);
 	
-	// adding filter to view afterwards shouldn't change anything
+	// adding filter, should remove all components
 	view.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 2.0));
 	sys.addDataViewer(view);
 	componentsInView = sys.getAllComponentsInView(view);
 	ASSERT_EQ(0, componentsInView.size());
-
-	/*
-	// check successing system
-	System* suc_sys = sys.createSuccessor();
-	// update view
-	suc_sys->addDataViewer(view);
-
-	componentsInView = suc_sys->getAllComponentsInView(view);
-	ASSERT_EQ(1, componentsInView.size());
-	ASSERT_TRUE(componentsInView.begin()->second == n2);	// read only!
-	*/
 	
+	// 'remove' filters by creating a new view
+	View view2("testview", NODE, READ);
+	view2.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 3.0));
+	sys.addDataViewer(view2);
+	componentsInView = sys.getAllComponentsInView(view2);
+	ASSERT_EQ(2, componentsInView.size());
+	Component *c1 = componentsInView.begin()->second;
+	Component *c2 = (componentsInView.begin()++)->second;
+	ASSERT_TRUE(c1 == n1 || c1 == n2);
+	ASSERT_TRUE(c2 == n1 || c2 == n2);
 }
 
 }
