@@ -492,7 +492,7 @@ bool System::addDataViewer(const View& view)
 {
 	QMutexLocker ml(mutex);
 	if(!map_contains(&dataViewers, view.getName()))
-		this->dataViewers[view.getName()] = new DataViewer(view);
+		this->dataViewers[view.getName()] = new DataViewer(view, this);
 	else
 		this->dataViewers[view.getName()]->update(view);
 
