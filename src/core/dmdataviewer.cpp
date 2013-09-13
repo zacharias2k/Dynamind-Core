@@ -35,35 +35,6 @@
 
 using namespace DM;
 
-DataViewer::DataViewer(const View& view):
-	currentViewDefinition()
-{
-	currentViewDefinition = view;
-	currentViewDefinition.clearFilters();
-	update(view);
-}
-
-const std::vector<Component*>& DataViewer::getComponents() const
-{
-	return components;
-}
-
-void DataViewer::addComponent(Component* component)
-{
-	components.push_back(component);
-}
-
-bool DataViewer::removeComponent(Component* component)
-{
-	std::vector<Component*>::iterator it = find(components.begin(), components.end(), component);
-	if(it != components.end())
-	{
-		components.erase(it);
-		return true;
-	}
-	return false;
-}
-
 bool ApplyFilter(Component* c, DataFilter* filter)
 {
 	if(filter->attributeName.empty())
@@ -102,6 +73,44 @@ void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter
 	}
 
 	componentList = newComponentList;
+}
+
+DataViewer::DataViewer(const View& view):
+	currentViewDefinition()
+{
+	currentViewDefinition = view;
+	currentViewDefinition.clearFilters();
+	update(view);
+}
+
+const std::vector<Component*>& DataViewer::getComponents() const
+{
+	return filteredComponents;
+}
+
+void DataViewer::addComponent(Component* component)
+{
+	components.push_back(component);
+
+	bool isValid = true;
+	foreach(DataFilter* filter, currentViewDefinition.getFilters())
+		if(!ApplyFilter(component, filter))
+			isValid = false;
+
+	if(isValid)
+		filteredComponents.push_back(component);
+}
+
+bool DataViewer::removeComponent(Component* component)
+{
+	std::vector<Component*>::iterator it = find(components.begin(), components.end(), component);
+	if(it != components.end())
+	{
+		components.erase(it);
+		filteredComponents.erase(find(filteredComponents.begin(), filteredComponents.end(), component));
+		return true;
+	}
+	return false;
 }
 
 void DataViewer::update(const View& view)
@@ -163,6 +172,9 @@ void DataViewer::migrateComponent(const Component* src, Component* dest)
 	{
 		std::vector<Component*>::iterator it = find(components.begin(), components.end(), src);
 		if(it != components.end())
+			*it = dest;
+		it = find(filteredComponents.begin(), filteredComponents.end(), src);
+		if(it != filteredComponents.end())
 			*it = dest;
 	}
 }
