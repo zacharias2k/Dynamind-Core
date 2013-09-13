@@ -32,6 +32,9 @@
 #include <dmcache.h>
 #include <createallcomponents.h>
 #include <dmlogsink.h>
+#include <dmview.h>
+#include "dmdatafilter.h"
+
 
 #include <QSqlQuery>
 #ifdef _OPENMP
@@ -779,6 +782,27 @@ TEST_F(TestSystem,AttributesInSystem) {
 	ASSERT_DOUBLE_EQ(sys_next->getAttribute("year")->getDouble(), 2011);
 
 	delete sys;
+}
+
+TEST_F(TestSystem, ViewFilterCheck) {
+	ostream *out = &cout;
+	DM::Log::init(new DM::OStreamLogSink(*out), DM::Error);
+	DM::Logger(DM::Standard) << "check view filters";
+	
+	View view("testview", NODE, READ);
+	view.addFilter(DataFilter(DataFilter::X, DataFilter::GREATER, 1.0));
+	view.addFilter(DataFilter(DataFilter::X, DataFilter::LESS, 4.0));
+
+	System sys;
+	//sys.addDataViewer(view);
+	sys.addNode(1,1,1, view);
+	sys.addNode(2,2,2, view);
+	sys.addNode(3,3,3, view);
+	sys.addNode(4,4,4, view);
+	std::map<std::string, Component*> componentsInView = sys.getAllComponentsInView(view);
+	
+	ASSERT_TRUE(componentsInView.size() == 2);
+
 }
 
 }
