@@ -225,15 +225,13 @@ System* Module::getOutPortData(const std::string &name) const
 	return sys;
 }
 
-void Module::addData(const std::string& streamName, std::vector<View> views)
+void Module::addData(const std::string& streamName, const std::vector<View>& views)
 {
 	if(views.size())
 	{
-		std::map<std::string,View> viewMap;
+		std::map<std::string,View>& accessedViews = this->accessedViews[streamName];
 		foreach(const View v, views)
-			viewMap[v.getName()] = v;
-
-		this->accessedViews[streamName] = viewMap;
+			accessedViews[v.getName()] = v;
 	}
 	else
 		this->accessedViews.erase(streamName);

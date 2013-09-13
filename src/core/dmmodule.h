@@ -254,7 +254,7 @@ protected:
 	* - AccessType Modify: In and Outport
 	*
 	* If a port already exists no new port is added, existing definitions are overwritten. */
-	void addData(const std::string& streamName, std::vector<View> views);
+	void addData(const std::string& streamName, const std::vector<View>& views);
 
 	/** @brief Returns a pointer raster data set assigend to a view **/
 	RasterData* getRasterData(std::string name, View view);
