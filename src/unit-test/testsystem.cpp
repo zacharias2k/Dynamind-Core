@@ -829,6 +829,16 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	Component *c2 = (componentsInView.begin()++)->second;
 	ASSERT_TRUE(c1 == n1 || c1 == n2);
 	ASSERT_TRUE(c2 == n1 || c2 == n2);
+
+	// check attribute filter
+	n1->addAttribute("doublevalue", 1.0);
+	n2->addAttribute("doublevalue", 2.0);
+	n3->addAttribute("doublevalue", 3.0);
+	view2.addAttribute("doublevalue");
+	view2.addFilter(DataFilter("doublevalue", DataFilter::LESS, 2.0));
+	sys.addDataViewer(view2);
+	componentsInView = sys.getAllComponentsInView(view2);
+	ASSERT_EQ(1, componentsInView.size());
 }
 
 }
