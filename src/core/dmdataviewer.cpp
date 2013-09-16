@@ -234,10 +234,6 @@ void DataViewer::migrateComponent(const Component* src, Component* dest)
 
 void DataViewer::migrateAllComponents(DerivedSystem* targetSystem)
 {
-	//std::vector<Component*> predecComponents = components;
-	//foreach(Component* c, predecComponents)
-	//	migrateComponent(c, targetSystem->getComponent(c->getUUID()));
-
 	// copy stuff from successor
 	foreach(Component* c, components)
 		if(c->getCurrentSystem() != owningSystem)
