@@ -640,6 +640,18 @@ std::vector<Component*> System::getChilds()
 	return resultVec;
 }
 
+DataViewer* System::getDataViewer(const std::string& viewName) const
+{
+	DataViewer* viewer = NULL;
+	map_contains(&dataViewers, viewName, viewer);
+	return viewer;	
+}
+
+bool System::hasChild(const Component* c) const
+{
+	return map_contains(&ownedchilds, c->getQUUID());
+}
+
 void System::SQLInsert()
 {
 	isInserted = true;
