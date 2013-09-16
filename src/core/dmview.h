@@ -121,7 +121,7 @@ public:
 	std::string const & getName() const {return this->name;}
 
 	/** @brief Set name of the view */
-	void setName(std::string name){this->name = name;}
+	//void setName(std::string name){this->name = name;}
 
 	/** @brief Return a list of attributes that are added to the component */
 	std::vector<std::string>  getWriteAttributes  () const;
@@ -130,7 +130,7 @@ public:
 	std::vector<std::string>  getReadAttributes  () const;
 
 	/** @brief Set Type */
-	void setType(Components type) {this->type = type;}
+	//void setType(Components type) {this->type = type;}
 
 	/** @brief Return Type */
 	Components getType() const {return type;}
@@ -139,7 +139,7 @@ public:
 	ACCESS getAccessType() const {return geometryAccess;}
 
 	/** @brief set AccessType of the Geometry */
-	void setAccessType(ACCESS geometryAccess) {this->geometryAccess = geometryAccess;}
+	//void setAccessType(ACCESS geometryAccess) {this->geometryAccess = geometryAccess;}
 
 	/** @brief Returns true if the accesstype of the geomtry or from one attribute is modify or read */
 	bool reads() const;
