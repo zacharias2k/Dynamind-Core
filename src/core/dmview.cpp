@@ -28,6 +28,7 @@
 #include <dmmodule.h>
 #include <dmattribute.h>
 #include <dmdatafilter.h>
+#include <dmlogger.h>
 
 using namespace DM;
 
@@ -188,6 +189,14 @@ std::string View::getNameOfLinkedView(string name)
 
 void View::addFilter(const DataFilter& filter)
 {
+	// check if fitler is valid
+	if(!filter.attributeName.empty())
+		if(!map_contains(&linkedAttributes, filter.attributeName))
+		{
+			Logger(Error) << "invalid filter to view " << name;
+			return;
+		}
+
 	filters.push_back(new DataFilter(filter));
 }
 
