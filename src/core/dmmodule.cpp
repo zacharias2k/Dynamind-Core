@@ -371,7 +371,7 @@ View Module::getViewInStream(const std::string& streamName, const std::string& v
 	if(map_contains(&streamViews, streamName, views))
 		if(map_contains(&views, viewName, view))
 			return view;
-	view.setType(NOTYPE);
+
 	return view;
 }
 
