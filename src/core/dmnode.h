@@ -134,19 +134,7 @@ public:
 	bool compare2d(const Node * other, double round = 0) const;
 
 	/** @brief  Creates a pointer to a cloned Node object, including Attributes and uuid*/
-	Component* clone();
-/*
-	static void ResizeCache(unsigned long size);
-	static unsigned long GetCacheSize();
-
-	static void PrintCacheStatistics();
-	static void ClearCache();
-
-	Vector3* LoadFromDb();
-	void SaveToDb(Vector3* v);
-	static void _PreCache(const QList<Node*>& keys, QList<Vector3*>& values);
-	static void PreCache(const QList<Node*>& keys);*/
-	
+	Component* clone();	
 protected:
 	virtual void SetOwner(Component *owner);
 private:
@@ -157,7 +145,6 @@ private:
 	
 	Vector3 vector;
 	std::list<Edge*> *connectedEdges;	// not cached, for now
-//	static DbCache<Node*,Vector3> nodeCache; // defined in dmdbconnector.h
 };
 
 typedef std::map<std::string, DM::Node*> NodeMap;
