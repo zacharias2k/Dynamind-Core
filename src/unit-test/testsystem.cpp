@@ -218,16 +218,13 @@ TEST_F(TestSystem,cachetest) {
 	cfgNew.queryStackSize = 1234;
 	cfgNew.cacheBlockwritingSize = 1234;
 	cfgNew.attributeCacheSize = 1234;
-	//cfgNew.nodeCacheSize = 1234;
 	DBConnector::getInstance()->setConfig(cfgNew);
 	// check if config is applied correctly
 	DBConnectorConfig cfgNewReturned = DBConnector::getInstance()->getConfig();
 	ASSERT_TRUE(cfgNewReturned.queryStackSize == cfgNew.queryStackSize);
 	ASSERT_TRUE(cfgNewReturned.cacheBlockwritingSize == cfgNew.cacheBlockwritingSize);
 	ASSERT_TRUE(cfgNewReturned.attributeCacheSize == cfgNew.attributeCacheSize);
-	//ASSERT_TRUE(cfgNewReturned.nodeCacheSize == cfgNew.nodeCacheSize);
 	ASSERT_TRUE(Attribute::GetCacheSize() == cfgNew.attributeCacheSize);
-	//ASSERT_TRUE(Node::GetCacheSize() == cfgNew.nodeCacheSize);
 
 	// reset config
 	/*
@@ -271,9 +268,7 @@ TEST_F(TestSystem,simplesqltest) {
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
-	//DM::RasterData::PrintCacheStatistics();
 }
 
 
@@ -390,9 +385,7 @@ TEST_F(TestSystem, SqlNodeTest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
-	//DM::RasterData::PrintCacheStatistics();
 }
 
 /** @brief Tests deleting accessing nodes with edge pointers
@@ -507,9 +500,7 @@ TEST_F(TestSystem, SqlEdgeTest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
-	//DM::RasterData::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem, SqlFaceOrder)
@@ -544,9 +535,7 @@ TEST_F(TestSystem, SqlFaceOrder)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
-	//DM::RasterData::PrintCacheStatistics();
 }
 TEST_F(TestSystem, SQLRasterdata)
 {
@@ -569,38 +558,38 @@ TEST_F(TestSystem, SQLRasterdata)
 	// check values
 	DM::Logger(DM::Debug) << "checking values";
 	for(long x=0;x<size;x++)
+	{
 		for(long y=0;y<size;y++)
 		{
 			DM::Logger(DM::Debug) << "checking " << x << "/" << y;
 			ASSERT_TRUE(raster->getCell(x,y) == x*1000+y);
 		}
-		delete raster;
+	}
+	delete raster;
 
-		raster = new DM::RasterData();
-		raster->setSize(size,size,1,1,0,0);
-		// check no value
-		DM::Logger(DM::Debug) << "checking default values with seperatly initialized grid";
-		for(long x=0;x<size;x++)
-			for(long y=0;y<size;y++)
-				ASSERT_TRUE(raster->getCell(x,y) == raster->getNoValue());
-		// insert
-		DM::Logger(DM::Debug) << "inserting values with seperatly initialized grid";
-		for(long x=0;x<size;x++)
-			for(long y=0;y<size;y++)
-				raster->setCell(x,y,x*1000+y);
-		// check values
-		DM::Logger(DM::Debug) << "checking values with seperatly initialized grid";
-		for(long x=0;x<size;x++)
-			for(long y=0;y<size;y++)
-				ASSERT_TRUE(raster->getCell(x,y) == x*1000+y);
+	raster = new DM::RasterData();
+	raster->setSize(size,size,1,1,0,0);
+	// check no value
+	DM::Logger(DM::Debug) << "checking default values with seperatly initialized grid";
+	for(long x=0;x<size;x++)
+		for(long y=0;y<size;y++)
+			ASSERT_TRUE(raster->getCell(x,y) == raster->getNoValue());
+	// insert
+	DM::Logger(DM::Debug) << "inserting values with seperatly initialized grid";
+	for(long x=0;x<size;x++)
+		for(long y=0;y<size;y++)
+			raster->setCell(x,y,x*1000+y);
+	// check values
+	DM::Logger(DM::Debug) << "checking values with seperatly initialized grid";
+	for(long x=0;x<size;x++)
+		for(long y=0;y<size;y++)
+			ASSERT_TRUE(raster->getCell(x,y) == x*1000+y);
 
-		delete raster;
+	delete raster;
 
-		DBConnector::getInstance()->Synchronize();
-		// print cache statistics
-		//DM::Node::PrintCacheStatistics();
-		DM::Attribute::PrintCacheStatistics();
-		//DM::RasterData::PrintCacheStatistics();
+	DBConnector::getInstance()->Synchronize();
+	// print cache statistics
+	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem, SQLattributes)
@@ -764,9 +753,7 @@ TEST_F(TestSystem, SQLattributes)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
-	//DM::RasterData::PrintCacheStatistics();
 }
 TEST_F(TestSystem, SystemGetEdge)
 {
