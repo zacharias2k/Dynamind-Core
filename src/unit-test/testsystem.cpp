@@ -840,7 +840,6 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	sys.addDataViewer(view3);
 	componentsInView = sys.getAllComponentsInView(view2);
 	ASSERT_EQ(1, componentsInView.size());
-
 }
 
 }
