@@ -90,10 +90,9 @@ void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter
 }
 
 DataViewer::DataViewer(const View& view, System* owningSystem):
-	currentViewDefinition(),
+	currentViewDefinition(view),
 	owningSystem(owningSystem)
 {
-	currentViewDefinition = view;
 	currentViewDefinition.clearFilters();
 	update(view);
 }
