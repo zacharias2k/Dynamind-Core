@@ -822,7 +822,7 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	ASSERT_TRUE(c1 == n1 || c1 == n2);
 	ASSERT_TRUE(c2 == n1 || c2 == n2);
 
-	// check attribute filter
+	// check attribute double filter
 	n1->addAttribute("doublevalue", 1.0);
 	n2->addAttribute("doublevalue", 2.0);
 	n3->addAttribute("doublevalue", 3.0);
@@ -831,6 +831,16 @@ TEST_F(TestSystem, ViewFilterCheck) {
 	sys.addDataViewer(view2);
 	componentsInView = sys.getAllComponentsInView(view2);
 	ASSERT_EQ(1, componentsInView.size());
+	
+	// check attribute string filter
+	n1->addAttribute("stringattribute", "value");
+	View view3("testview", NODE, READ);
+	view3.addAttribute("stringattribute");
+	view3.addFilter(DataFilter("stringattribute", DataFilter::EQUAL, "value"));
+	sys.addDataViewer(view3);
+	componentsInView = sys.getAllComponentsInView(view2);
+	ASSERT_EQ(1, componentsInView.size());
+
 }
 
 }

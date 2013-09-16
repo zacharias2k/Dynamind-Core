@@ -43,10 +43,16 @@ struct DataFilter
 	};
 
 	DataFilter(CoordinateTarget coord, Operator op, double value):
-		attributeName(""), coord(coord), op(op), value(value)
+		attributeName(""), coord(coord), op(op), 
+		svalue(), dvalue(value), type(Node)
 	{}
 	DataFilter(std::string attributeName, Operator op, double value):
-		attributeName(attributeName), coord(None), op(op), value(value)
+		attributeName(attributeName), coord(None), op(op), 
+		svalue(), dvalue(value), type(AttributeDouble)
+	{}
+	DataFilter(std::string attributeName, Operator op, std::string value):
+		attributeName(attributeName), coord(None), op(op), 
+		svalue(value), dvalue(0), type(AttributeString)
 	{}
 
 	bool operator == (const DataFilter& ref)
@@ -54,15 +60,23 @@ struct DataFilter
 		if(attributeName != ref.attributeName)	return false;
 		if(coord != ref.coord)					return false;
 		if(op != ref.op)						return false;
-		if(value != ref.value)					return false;
+		if(dvalue != ref.dvalue)				return false;
+		if(svalue != ref.svalue)				return false;
 
 		return true;
 	}
 
+	enum FilterType
+	{
+		Node,
+		AttributeDouble,
+		AttributeString,
+	} const type;
 	const std::string		attributeName;
 	const CoordinateTarget	coord;
 	const Operator			op;
-	const double			value;
+	const double			dvalue;
+	const std::string		svalue;
 };
 }
 

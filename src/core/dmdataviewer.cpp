@@ -37,37 +37,46 @@ using namespace DM;
 
 bool ApplyFilter(Component* c, DataFilter* filter)
 {
-	double value;
-	if(filter->attributeName.empty())
+	Attribute *a = NULL;
+	Node* n = NULL;
+
+	if(filter->type == DataFilter::AttributeString || filter->type == DataFilter::AttributeDouble)
 	{
-		if(Node* n = dynamic_cast<Node*>(c))
-			value = n->get(filter->coord);
+		a = c->getAttribute(filter->attributeName);
+		if(!a)
+			return false;
+	}
+	else if (filter->type == DataFilter::Node)
+	{
+		n = dynamic_cast<Node*>(c);
+		if(!n)
+			return false;
+	}
+	
+	double dvalue;
+
+	if(filter->type == DataFilter::AttributeString)
+	{
+		if(a->getType() == Attribute::STRING && filter->op == DataFilter::EQUAL)
+			return a->getString() == filter->svalue;
 		else
 			return false;
 	}
-	else
-	{
-		Attribute* a = c->getAttribute(filter->attributeName);
-		switch(a->getType())
-		{
-		case Attribute::DOUBLE:
-			value = a->getDouble();
-			break;
-		default:
-			return false;
-		}
-	}
+	else if(filter->type == DataFilter::AttributeDouble)
+		dvalue = a->getDouble();
+	else if(filter->type == DataFilter::Node)
+		dvalue = n->get(filter->coord);
 
 	if(filter->op == DataFilter::GREATER)
-		return value > filter->value;
+		return dvalue > filter->dvalue;
 	else if(filter->op == DataFilter::GREATEREQUAL)
-		return value >= filter->value;
+		return dvalue >= filter->dvalue;
 	else if(filter->op == DataFilter::LESS)
-		return value < filter->value;
+		return dvalue < filter->dvalue;
 	else if(filter->op == DataFilter::LESSEQUAL)
-		return value <= filter->value;
+		return dvalue <= filter->dvalue;
 	else if(filter->op == DataFilter::EQUAL)
-		return value == filter->value;
+		return dvalue == filter->dvalue;
 
 	return true;
 }
