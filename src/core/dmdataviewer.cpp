@@ -37,24 +37,38 @@ using namespace DM;
 
 bool ApplyFilter(Component* c, DataFilter* filter)
 {
+	double value;
 	if(filter->attributeName.empty())
 	{
 		if(Node* n = dynamic_cast<Node*>(c))
+			value = n->get(filter->coord);
+		else
+			return false;
+	}
+	else
+	{
+		Attribute* a = c->getAttribute(filter->attributeName);
+		switch(a->getType())
 		{
-			double value = n->get(filter->coord);
-			
-			if(filter->op == DataFilter::GREATER)
-				return value > filter->value;
-			else if(filter->op == DataFilter::GREATEREQUAL)
-				return value >= filter->value;
-			else if(filter->op == DataFilter::LESS)
-				return value < filter->value;
-			else if(filter->op == DataFilter::LESSEQUAL)
-				return value <= filter->value;
-			else if(filter->op == DataFilter::EQUAL)
-				return value == filter->value;
+		case Attribute::DOUBLE:
+			value = a->getDouble();
+			break;
+		default:
+			return false;
 		}
 	}
+
+	if(filter->op == DataFilter::GREATER)
+		return value > filter->value;
+	else if(filter->op == DataFilter::GREATEREQUAL)
+		return value >= filter->value;
+	else if(filter->op == DataFilter::LESS)
+		return value < filter->value;
+	else if(filter->op == DataFilter::LESSEQUAL)
+		return value <= filter->value;
+	else if(filter->op == DataFilter::EQUAL)
+		return value == filter->value;
+
 	return true;
 }
 
