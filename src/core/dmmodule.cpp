@@ -311,6 +311,14 @@ System* Module::getData(const std::string& streamName)
 	return sys;
 }
 
+DataViewer* Module::getData(const std::string& streamName, const std::string& viewName)
+{
+	System* sys = getData(streamName);
+	if(sys)
+		return sys->getDataViewer(viewName);
+	return NULL;
+}
+
 RasterData* Module::getRasterData(std::string name, View view)
 {
 	System* data = getData(name);

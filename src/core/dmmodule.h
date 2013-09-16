@@ -43,6 +43,7 @@ class System;
 class RasterData;
 class ModuleObserver;
 class Simulation;
+class DataViewer;
 
 // enums
 #if defined _MSC_VER && defined _WIN32 || __cplusplus <= 199711L
@@ -233,6 +234,9 @@ public:
 protected:
 	/** @brief returns the data from the desired stream */
 	System* getData(const std::string& streamName);
+
+	/** @brief returns the data from the desired stream */
+	DataViewer* getData(const std::string& streamName, const std::string& viewName);
 
 	/** @brief checks if in-port does exist */
 	bool hasInPort(const std::string &name) const;
