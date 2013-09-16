@@ -74,6 +74,9 @@ bool ApplyFilter(Component* c, DataFilter* filter)
 
 void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter*> filters)
 {
+	if(filters.size() == 0)
+		return;
+
 	std::vector<Component*> newComponentList;
 	foreach(Component* c, componentList)
 	{
@@ -91,7 +94,8 @@ void ApplyFilters(std::vector<Component*>& componentList, std::vector<DataFilter
 
 DataViewer::DataViewer(const View& view, System* owningSystem):
 	currentViewDefinition(view),
-	owningSystem(owningSystem)
+	owningSystem(owningSystem),
+	attributesCached(false)
 {
 	currentViewDefinition.clearFilters();
 	update(view);
@@ -101,7 +105,8 @@ DataViewer::DataViewer(const DataViewer& ref, System* owningSystem):
 	components(ref.components),
 	currentViewDefinition(ref.currentViewDefinition),
 	filteredComponents(ref.filteredComponents),
-	owningSystem(owningSystem)
+	owningSystem(owningSystem),
+	attributesCached(false)
 {
 
 }
@@ -190,7 +195,8 @@ void DataViewer::update(const View& view)
 			break;
 		}
 	}
-
+	
+	this->attributesCached = true;
 	if(renewFilteredComponents)
 	{
 		// recreate filteredComponents
@@ -214,9 +220,14 @@ void DataViewer::update(const View& view)
 			if(isNew)
 				newFilters.push_back(newFilter);
 		}
+
 		ApplyFilters(filteredComponents, newFilters);
 	}
+	// update view definition
 	currentViewDefinition = view;
+	// update attribute cache
+
+
 }
 
 void DataViewer::migrateComponent(const Component* src, Component* dest)

@@ -58,6 +58,8 @@ private:
 	
 	std::vector<Component*>	components;
 	std::vector<Component*>	filteredComponents;
+
+	bool attributesCached;
 };
 
 }
