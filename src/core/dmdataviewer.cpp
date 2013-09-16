@@ -104,6 +104,32 @@ const std::vector<Component*>& DataViewer::getComponents()
 
 void DataViewer::addComponent(Component* component)
 {
+	if(!owningSystem->hasChild(component))
+	{
+		switch(component->getType())
+		{
+		case NODE:
+			owningSystem->addNode((Node*)component);
+			break;
+		case EDGE:
+			owningSystem->addEdge((Edge*)component);
+			break;
+		case FACE:
+			owningSystem->addFace((Face*)component);
+			break;
+		case RASTERDATA:
+			owningSystem->addRasterData((RasterData*)component);
+			break;
+		case SUBSYSTEM:
+			owningSystem->addSubSystem((System*)component);
+			break;
+		case COMPONENT:
+			owningSystem->addComponent(component);
+			break;
+		default:
+			return;
+		}
+	}
 	components.push_back(component);
 
 	bool isValid = true;
