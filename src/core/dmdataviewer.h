@@ -36,7 +36,7 @@ class Component;
 class System;
 class DerivedSystem;
 
-class DataViewer
+class DM_HELPER_DLL_EXPORT DataViewer
 {
 public:
 	DataViewer(const View& view, System* owningSystem);
