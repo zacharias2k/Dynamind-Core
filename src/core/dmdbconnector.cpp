@@ -451,7 +451,7 @@ DBConnector* DBConnector::getInstance()
 DBConnectorConfig DBConnector::getConfig()
 {
 	DBConnectorConfig cfg;
-	cfg.nodeCacheSize = Node::GetCacheSize();
+	//cfg.nodeCacheSize = Node::GetCacheSize();
 	cfg.attributeCacheSize = Attribute::GetCacheSize();
 	cfg.cacheBlockwritingSize = cacheBlockwritingSize;
 	cfg.queryStackSize = queryStackSize;
@@ -459,13 +459,13 @@ DBConnectorConfig DBConnector::getConfig()
 }
 void DBConnector::setConfig(DBConnectorConfig cfg)
 {
-	Node::ResizeCache(cfg.nodeCacheSize);
+	//Node::ResizeCache(cfg.nodeCacheSize);
 	Attribute::ResizeCache(cfg.attributeCacheSize);
 
-	if(cacheBlockwritingSize>cfg.nodeCacheSize-1)
+	/*if(cacheBlockwritingSize>cfg.nodeCacheSize-1)
 		Logger(Error) << "invalid value: cache block writing"
 		<< "size cannot be bigger then node cache size -1";
-	else if(cacheBlockwritingSize>cfg.attributeCacheSize-1)
+	else */if(cacheBlockwritingSize>cfg.attributeCacheSize-1)
 		Logger(Error) << "invalid value: cache block writing"
 		<< "size cannot be bigger then attribute cache size -1";
 	else if(cfg.cacheBlockwritingSize<1)

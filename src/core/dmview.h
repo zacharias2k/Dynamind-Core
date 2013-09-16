@@ -101,7 +101,7 @@ class DM_HELPER_DLL_EXPORT View
 {
 public:
 	/** @brief Default constructor to create a new view */
-	View(std::string name, Components type, ACCESS geometryAccess = READ);
+	View(std::string name, Components type = COMPONENT, ACCESS geometryAccess = READ);
 	View();
 	View(const View& ref);
 	~View();
@@ -130,7 +130,7 @@ public:
 	std::vector<std::string>  getReadAttributes  () const;
 
 	/** @brief Set Type */
-	//void setType(Components type) {this->type = type;}
+	void setType(Components type) {this->type = type;}
 
 	/** @brief Return Type */
 	Components getType() const {return type;}
@@ -139,7 +139,7 @@ public:
 	ACCESS getAccessType() const {return geometryAccess;}
 
 	/** @brief set AccessType of the Geometry */
-	//void setAccessType(ACCESS geometryAccess) {this->geometryAccess = geometryAccess;}
+	void setAccessType(ACCESS geometryAccess) {this->geometryAccess = geometryAccess;}
 
 	/** @brief Returns true if the accesstype of the geomtry or from one attribute is modify or read */
 	bool reads() const;

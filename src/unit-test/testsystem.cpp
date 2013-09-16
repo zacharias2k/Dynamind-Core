@@ -218,16 +218,16 @@ TEST_F(TestSystem,cachetest) {
 	cfgNew.queryStackSize = 1234;
 	cfgNew.cacheBlockwritingSize = 1234;
 	cfgNew.attributeCacheSize = 1234;
-	cfgNew.nodeCacheSize = 1234;
+	//cfgNew.nodeCacheSize = 1234;
 	DBConnector::getInstance()->setConfig(cfgNew);
 	// check if config is applied correctly
 	DBConnectorConfig cfgNewReturned = DBConnector::getInstance()->getConfig();
 	ASSERT_TRUE(cfgNewReturned.queryStackSize == cfgNew.queryStackSize);
 	ASSERT_TRUE(cfgNewReturned.cacheBlockwritingSize == cfgNew.cacheBlockwritingSize);
 	ASSERT_TRUE(cfgNewReturned.attributeCacheSize == cfgNew.attributeCacheSize);
-	ASSERT_TRUE(cfgNewReturned.nodeCacheSize == cfgNew.nodeCacheSize);
+	//ASSERT_TRUE(cfgNewReturned.nodeCacheSize == cfgNew.nodeCacheSize);
 	ASSERT_TRUE(Attribute::GetCacheSize() == cfgNew.attributeCacheSize);
-	ASSERT_TRUE(Node::GetCacheSize() == cfgNew.nodeCacheSize);
+	//ASSERT_TRUE(Node::GetCacheSize() == cfgNew.nodeCacheSize);
 
 	// reset config
 	/*
@@ -271,7 +271,7 @@ TEST_F(TestSystem,simplesqltest) {
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Node::PrintCacheStatistics();
+	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
 	//DM::RasterData::PrintCacheStatistics();
 }
@@ -309,6 +309,11 @@ TEST_F(TestSystem,sqlsuccessortest)
 	Node* sysn = sys->getNode(name);
 	Node* sysn2 = sys2->getNode(name);
 	Node* sysn22 = sys2->getNode(name2);
+	
+	ASSERT_TRUE(sysn);
+	ASSERT_TRUE(sysn2);
+	ASSERT_TRUE(sysn22);
+
 	ASSERT_TRUE(*sysn2 == *n);
 	ASSERT_TRUE(*sysn22 == *n2);
 	ASSERT_TRUE(sysn2->getUUID() == n->getUUID());
@@ -385,7 +390,7 @@ TEST_F(TestSystem, SqlNodeTest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Node::PrintCacheStatistics();
+	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
 	//DM::RasterData::PrintCacheStatistics();
 }
@@ -502,7 +507,7 @@ TEST_F(TestSystem, SqlEdgeTest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Node::PrintCacheStatistics();
+	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
 	//DM::RasterData::PrintCacheStatistics();
 }
@@ -539,7 +544,7 @@ TEST_F(TestSystem, SqlFaceOrder)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Node::PrintCacheStatistics();
+	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
 	//DM::RasterData::PrintCacheStatistics();
 }
@@ -593,7 +598,7 @@ TEST_F(TestSystem, SQLRasterdata)
 
 		DBConnector::getInstance()->Synchronize();
 		// print cache statistics
-		DM::Node::PrintCacheStatistics();
+		//DM::Node::PrintCacheStatistics();
 		DM::Attribute::PrintCacheStatistics();
 		//DM::RasterData::PrintCacheStatistics();
 }
@@ -759,7 +764,7 @@ TEST_F(TestSystem, SQLattributes)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Node::PrintCacheStatistics();
+	//DM::Node::PrintCacheStatistics();
 	DM::Attribute::PrintCacheStatistics();
 	//DM::RasterData::PrintCacheStatistics();
 }

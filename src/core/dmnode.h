@@ -39,8 +39,18 @@
 namespace DM {
 
 class Component;
-class Vector3;
 class Edge;
+
+class Vector3
+{
+public:
+	double x,y,z;
+
+	Vector3(){x=y=z=0.0;}
+	Vector3(double x,double y,double z){this->x=x;this->y=y;this->z=z;}
+	Vector3(const Vector3 &ref){this->x=ref.x;this->y=ref.y;this->z=ref.z;}
+};
+
 /**
 * @ingroup DynaMind-Core
 * @brief Provides a 3D node object
@@ -82,7 +92,7 @@ public:
 	const double get(unsigned int i) const;
 
 	/** @brief writes a xyz-double[3] into the given vector */
-	const void get(double *vector) const;
+	void get(double *vector) const;
 
 	/** @brief returns all edges connecting this node */
 	std::vector<Edge*> getEdges() const;
@@ -104,18 +114,18 @@ public:
 
 	/** @brief return true if x, y and z are the same*/
 	bool operator==(const Node & other) const;
-
+	
 	/** @brief x1-x2, y1-y2, z1-z2*/
-	Node operator-(const Node & other) const;
+	const Node operator-(const Node & other) const;
 
 	/** @brief x1+x2, y1+y2, z1+z2*/
-	Node operator+(const Node & other) const;
+	const Node operator+(const Node & other) const;
 
 	/** @brief x1*val, y1*val, z1*val*/
-	Node operator*(const double & val) const;
+	const Node operator*(const double & val) const;
 
 	/** @brief x1/val, y1/val, z1/val*/
-	Node operator/(const double & val) const;
+	const Node operator/(const double & val) const;
 
 	/** @brief return if x and y are +- round the same*/
 	bool compare2d(const Node &other, double round = 0) const;
@@ -125,7 +135,7 @@ public:
 
 	/** @brief  Creates a pointer to a cloned Node object, including Attributes and uuid*/
 	Component* clone();
-
+/*
 	static void ResizeCache(unsigned long size);
 	static unsigned long GetCacheSize();
 
@@ -135,7 +145,7 @@ public:
 	Vector3* LoadFromDb();
 	void SaveToDb(Vector3* v);
 	static void _PreCache(const QList<Node*>& keys, QList<Vector3*>& values);
-	static void PreCache(const QList<Node*>& keys);
+	static void PreCache(const QList<Node*>& keys);*/
 	
 protected:
 	virtual void SetOwner(Component *owner);
@@ -145,19 +155,9 @@ private:
 	void addEdge(Edge* e);
 	void removeEdge(Edge* e);
 	
-	Vector3* vector;
+	Vector3 vector;
 	std::list<Edge*> *connectedEdges;	// not cached, for now
-	static DbCache<Node*,Vector3> nodeCache; // defined in dmdbconnector.h
-};
-
-class Vector3
-{
-public:
-	double x,y,z;
-
-	Vector3(){x=y=z=0.0;}
-	Vector3(double x,double y,double z){this->x=x;this->y=y;this->z=z;}
-	Vector3(const Vector3 &ref){this->x=ref.x;this->y=ref.y;this->z=ref.z;}
+//	static DbCache<Node*,Vector3> nodeCache; // defined in dmdbconnector.h
 };
 
 typedef std::map<std::string, DM::Node*> NodeMap;
