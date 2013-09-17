@@ -230,11 +230,11 @@ Edge* System::getEdge(std::string uuid)
 {
 	return (Edge*)getChild(uuid);
 }
-Edge* System::getEdge(QUuid uuid)
+Edge* System::getEdge(const QUuid& uuid)
 {
-	if(edges.find(uuid)==edges.end())
-		return 0;
-	return edges[uuid];
+	Edge* e = NULL;
+	map_contains(&edges, uuid, e);
+	return e;
 }
 Edge* System::getEdge(const std::string & startnode, const std::string & endnode)
 {
