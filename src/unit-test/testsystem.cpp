@@ -265,6 +265,7 @@ TEST_F(TestSystem,simplesqltest) {
 	sim.run();
 	ASSERT_TRUE(((CheckAllComponenets*)mcheck)->success);
 
+	sim.clear();
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
@@ -318,6 +319,10 @@ TEST_F(TestSystem,sqlsuccessortest)
 
 	delete sys;
 	//delete sys2;	successor states are deleted by sys
+
+	DBConnector::getInstance()->Synchronize();
+	// print cache statistics
+	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem,successorViewTest)
@@ -347,6 +352,10 @@ TEST_F(TestSystem,successorViewTest)
 	ASSERT_TRUE(successor_node != node);
 
 	delete sys;
+	
+	DBConnector::getInstance()->Synchronize();
+	// print cache statistics
+	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem, SqlNodeTest)
