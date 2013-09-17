@@ -121,6 +121,7 @@ void Simulation::removeModule(Module* m)
 
 void Simulation::clear()
 {
+	reset();
 	foreach(Module* m, modules)
 		removeModule(m);
 }
