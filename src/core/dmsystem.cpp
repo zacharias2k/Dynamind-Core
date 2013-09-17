@@ -323,7 +323,6 @@ RasterData * System::addRasterData(RasterData *r, const DM::View & view)
 	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
 	{
 		dataViewer->addComponent(r);
-//		r->setView(view.getName());
 	}
 
 	return r;
@@ -376,7 +375,6 @@ void System::addComponentToView(Component *comp, const View &view)
 		}
 
 		dataViewer->addComponent(comp);
-//		comp->setView(view.getName());
 	}
 }
 
@@ -388,7 +386,6 @@ bool System::removeComponentFromView(Component *comp, const View &view)
 	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
 	{
 		dataViewer->removeComponent(comp);
-//		comp->removeView(view);
 	}
 
 	return true;
@@ -436,17 +433,6 @@ std::map<std::string, Component*> System::getAllComponentsInView(const DM::View 
 	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
 		foreach(Component* c, dataViewer->getComponents())
 			cmps[c->getUUID()] = c;
-
-	//const std::map<std::string, Component*> &cmps = views[view.getName()];
-	// precaching
-	/*if(view.getType() == DM::NODE)
-	{
-	QList<Node*> nodes;
-	mforeach(DM::Component* c, cmps)
-	nodes.append((Node*)c);	// we assume, that the view is correctly assigned
-
-	Node::PreCache(nodes);
-	}*/
 
 	return cmps;
 }
@@ -580,9 +566,6 @@ bool System::removeChild(Component* c)
 	case SUBSYSTEM:    subsystems.erase(id);   break;
 	}
 
-	//DataViewer* dataViewer;
-	//foreach(std::string viewName, c->getInViews())
-	//	if(map_contains(&dataViewers, viewName, dataViewer))
 	mforeach(DataViewer* dataViewer, dataViewers)
 			dataViewer->removeComponent(c);
 
