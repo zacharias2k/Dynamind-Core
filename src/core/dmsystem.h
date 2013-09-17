@@ -271,7 +271,7 @@ private:
 	/** @brief add Predecessor **/
 	void addPredecessors(DM::System * s);
 	
-	DM::Module* lastModule;
+	//DM::Module* lastModule;
 	std::map<QUuid, Node* >			nodes;
 	std::map<QUuid, Edge* >			edges;
 	std::map<QUuid, Face* >			faces;

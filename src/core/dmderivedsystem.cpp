@@ -52,7 +52,7 @@ DerivedSystem::DerivedSystem(System* sys): System()
 	//predecessors = sys->predecessors;
 	//views = sys->views;
 
-	lastModule = sys->lastModule;
+	//lastModule = sys->lastModule;
 
 	CopyFrom(*sys, true);
 
