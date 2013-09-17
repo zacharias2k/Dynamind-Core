@@ -192,12 +192,12 @@ public:
 	static void ClearCache();
 
 private:
-//	QUuid			_uuid;
+	AttributeValue*	getValue() const;
+
 	std::string		name;
 	Component*		owner;
-	AttributeValue	*value;
+	AttributeValue*	value;
 	bool			isInserted;
-	AttributeValue*	getValue() const;
 
 	static DbCache<Attribute*,Attribute::AttributeValue> attributeCache;
 };
