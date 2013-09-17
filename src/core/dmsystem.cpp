@@ -323,7 +323,7 @@ RasterData * System::addRasterData(RasterData *r, const DM::View & view)
 	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
 	{
 		dataViewer->addComponent(r);
-		r->setView(view.getName());
+//		r->setView(view.getName());
 	}
 
 	return r;
@@ -376,7 +376,7 @@ void System::addComponentToView(Component *comp, const View &view)
 		}
 
 		dataViewer->addComponent(comp);
-		comp->setView(view.getName());
+//		comp->setView(view.getName());
 	}
 }
 
@@ -388,7 +388,7 @@ bool System::removeComponentFromView(Component *comp, const View &view)
 	if (!view.getName().empty() && map_contains(&dataViewers, view.getName(), dataViewer)) 
 	{
 		dataViewer->removeComponent(comp);
-		comp->removeView(view);
+//		comp->removeView(view);
 	}
 
 	return true;
@@ -580,9 +580,10 @@ bool System::removeChild(Component* c)
 	case SUBSYSTEM:    subsystems.erase(id);   break;
 	}
 
-	DataViewer* dataViewer;
-	foreach(std::string viewName, c->getInViews())
-		if(map_contains(&dataViewers, viewName, dataViewer))
+	//DataViewer* dataViewer;
+	//foreach(std::string viewName, c->getInViews())
+	//	if(map_contains(&dataViewers, viewName, dataViewer))
+	mforeach(DataViewer* dataViewer, dataViewers)
 			dataViewer->removeComponent(c);
 
 	if(c->HasAttribute(UUID_ATTRIBUTE_NAME))

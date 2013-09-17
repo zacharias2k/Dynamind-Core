@@ -235,8 +235,9 @@ void DataViewer::update(const View& view)
 	// update view definition
 	currentViewDefinition = view;
 	// update attribute cache
-
-
+	if(renewFilteredComponents)
+	{
+	}
 }
 
 void DataViewer::migrateComponent(const Component* src, Component* dest)
