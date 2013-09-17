@@ -192,8 +192,8 @@ public:
 	static void ClearCache();
 
 private:
-	QUuid		_uuid;
-	std::string name;
+	QUuid			_uuid;
+	std::string		name;
 	Component*		owner;
 	AttributeValue	*value;
 	bool			isInserted;

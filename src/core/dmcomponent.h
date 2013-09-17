@@ -167,9 +167,9 @@ private:
 	void LoadAttribute(std::string name);
 	bool addAttribute(Attribute *pAttribute);
 	void CopyFrom(const Component &c, bool successor = false);
+	void CloneAllAttributes();
 
 	bool isCached;
-	void CloneAllAttributes();
 };
 typedef std::map<std::string, DM::Component*> ComponentMap;
 }
