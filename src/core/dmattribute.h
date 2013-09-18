@@ -193,6 +193,9 @@ public:
 
 	static void PrintCacheStatistics();
 	static void ClearCache();*/
+	
+	static Attribute* LoadAttribute(const Component* c, const std::string& attributeName);
+	static void SaveAttribute(Attribute* a);
 
 private:
 	//AttributeValue*	getValue() const;
@@ -201,7 +204,7 @@ private:
 	Component*		owner;
 	AttributeValue	value;
 	bool			isInserted;
-
+	
 //	static DbCache<Attribute*,Attribute::AttributeValue> attributeCache;
 };
 typedef std::map<std::string, DM::Attribute*> AttributeMap;

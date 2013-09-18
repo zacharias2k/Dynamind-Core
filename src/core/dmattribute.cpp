@@ -547,6 +547,7 @@ void Attribute::setType(AttributeType type)
 void Attribute::Change(const Attribute &attribute)
 {
 	//name = attribute.name; name should never be changed!
+	value.Free();
 	AttributeValue* val = new AttributeValue(attribute.value);
 	value = *val;
 	val->ptr = NULL;
@@ -640,3 +641,46 @@ void Attribute::SaveToDb(Attribute::AttributeValue *val)
 	}
 }
 */
+
+
+Attribute* Attribute::LoadAttribute(const Component* c, const std::string& attributeName)
+{
+	QVariant t,v;
+	DBConnector::getInstance()->Select("attributes", c->getQUUID(), QString::fromStdString(attributeName),
+		"type",     &t,
+		"value",     &v);
+
+	Attribute* a = new Attribute(attributeName);
+	a->isInserted = true;
+
+	AttributeValue* val = new AttributeValue(v,(AttributeType)t.toInt());
+	a->value = *val;
+	val->ptr = NULL;
+	return a;
+}
+
+void Attribute::SaveAttribute(Attribute* a)
+{
+	if(a->owner)
+		return;
+	
+	QVariant qval = a->value.toQVariant();
+	QVariant qtype = QVariant::fromValue((int)a->value.type);
+	QString qname = QString::fromStdString(a->name);
+
+	if(a->isInserted)
+	{
+		DBConnector::getInstance()->Update(
+			"attributes",	a->owner->getQUUID(), qname,
+			"type",			&qtype,
+			"value",		&qval);
+	}
+	else
+	{
+		DBConnector::getInstance()->Insert(
+			"attributes",	a->owner->getQUUID(), qname,
+			"type",			&qtype,
+			"value",		&qval);
+		a->isInserted = true;
+	}
+}
