@@ -223,8 +223,8 @@ TEST_F(TestSystem,cachetest) {
 	DBConnectorConfig cfgNewReturned = DBConnector::getInstance()->getConfig();
 	ASSERT_TRUE(cfgNewReturned.queryStackSize == cfgNew.queryStackSize);
 	ASSERT_TRUE(cfgNewReturned.cacheBlockwritingSize == cfgNew.cacheBlockwritingSize);
-	ASSERT_TRUE(cfgNewReturned.attributeCacheSize == cfgNew.attributeCacheSize);
-	ASSERT_TRUE(Attribute::GetCacheSize() == cfgNew.attributeCacheSize);
+//	ASSERT_TRUE(cfgNewReturned.attributeCacheSize == cfgNew.attributeCacheSize);
+//	ASSERT_TRUE(Attribute::GetCacheSize() == cfgNew.attributeCacheSize);
 
 	// reset config
 	/*
@@ -269,7 +269,7 @@ TEST_F(TestSystem,simplesqltest) {
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 
 
@@ -322,7 +322,7 @@ TEST_F(TestSystem,sqlsuccessortest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem,successorViewTest)
@@ -355,7 +355,7 @@ TEST_F(TestSystem,successorViewTest)
 	
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem, SqlNodeTest)
@@ -394,7 +394,7 @@ TEST_F(TestSystem, SqlNodeTest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 
 /** @brief Tests deleting accessing nodes with edge pointers
@@ -509,7 +509,7 @@ TEST_F(TestSystem, SqlEdgeTest)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem, SqlFaceOrder)
@@ -544,7 +544,7 @@ TEST_F(TestSystem, SqlFaceOrder)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 TEST_F(TestSystem, SQLRasterdata)
 {
@@ -598,7 +598,7 @@ TEST_F(TestSystem, SQLRasterdata)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 
 TEST_F(TestSystem, SQLattributes)
@@ -614,8 +614,8 @@ TEST_F(TestSystem, SQLattributes)
 		// generate new component, as cache wont be used if attribute is not owned
 		Component* c = new Component;
 		// resize cache, so we dont have to wait too long for reaching the limits
-		unsigned int cacheBefore = Attribute::GetCacheSize();
-		Attribute::ResizeCache(7);
+//		unsigned int cacheBefore = Attribute::GetCacheSize();
+//		Attribute::ResizeCache(7);
 		// add
 		for(int i=0;i<10;i++)
 		{
@@ -649,7 +649,7 @@ TEST_F(TestSystem, SQLattributes)
 			//Logger(Error) << name.str() << ": " << c->getAttribute(name.str())->getDouble();
 		}
 		// reset cache
-		Attribute::ResizeCache(cacheBefore);
+//		Attribute::ResizeCache(cacheBefore);
 		delete c;
 	}
 
@@ -762,7 +762,7 @@ TEST_F(TestSystem, SQLattributes)
 
 	DBConnector::getInstance()->Synchronize();
 	// print cache statistics
-	DM::Attribute::PrintCacheStatistics();
+//	DM::Attribute::PrintCacheStatistics();
 }
 TEST_F(TestSystem, SystemGetEdge)
 {

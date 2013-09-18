@@ -451,14 +451,14 @@ DBConnector* DBConnector::getInstance()
 DBConnectorConfig DBConnector::getConfig()
 {
 	DBConnectorConfig cfg;
-	cfg.attributeCacheSize = Attribute::GetCacheSize();
+//	cfg.attributeCacheSize = Attribute::GetCacheSize();
 	cfg.cacheBlockwritingSize = cacheBlockwritingSize;
 	cfg.queryStackSize = queryStackSize;
 	return cfg;
 }
 void DBConnector::setConfig(DBConnectorConfig cfg)
 {
-	Attribute::ResizeCache(cfg.attributeCacheSize);
+//	Attribute::ResizeCache(cfg.attributeCacheSize);
 
 	if(cacheBlockwritingSize>cfg.attributeCacheSize-1)
 		Logger(Error) << "invalid value: cache block writing"
