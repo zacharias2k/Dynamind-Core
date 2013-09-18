@@ -643,7 +643,7 @@ void Attribute::SaveToDb(Attribute::AttributeValue *val)
 */
 
 
-Attribute* Attribute::LoadAttribute(const Component* c, const std::string& attributeName)
+Attribute* Attribute::LoadAttribute(Component* c, const std::string& attributeName)
 {
 	QVariant t,v;
 	DBConnector::getInstance()->Select("attributes", c->getQUUID(), QString::fromStdString(attributeName),
@@ -651,6 +651,7 @@ Attribute* Attribute::LoadAttribute(const Component* c, const std::string& attri
 		"value",     &v);
 
 	Attribute* a = new Attribute(attributeName);
+	a->setOwner(c);
 	a->isInserted = true;
 
 	AttributeValue* val = new AttributeValue(v,(AttributeType)t.toInt());
