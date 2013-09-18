@@ -80,7 +80,7 @@ public:
 
 //private:
 	/** @brief Copies a System  */
-	System(const System& s);
+//	System(const System& s);
 public:
 
 	/** @brief creates a new System */
