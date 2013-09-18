@@ -662,7 +662,7 @@ Attribute* Attribute::LoadAttribute(Component* c, const std::string& attributeNa
 
 void Attribute::SaveAttribute(Attribute* a)
 {
-	if(a->owner)
+	if(!a || !a->owner)
 		return;
 	
 	QVariant qval = a->value.toQVariant();
